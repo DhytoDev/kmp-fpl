@@ -1,4 +1,4 @@
-rootProject.name = "KotlinProject"
+rootProject.name = "fpl-app"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -39,4 +39,4 @@ dependencyResolutionManagement {
 }
 
 include(":shared")
-include(":composeApp")
+include(":androidApp")
