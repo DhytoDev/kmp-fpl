@@ -3,7 +3,7 @@ package dev.dhyto.fpl.shared.di
 import dev.dhyto.fpl.shared.data.remote.FantasyPremierLeagueApi
 import dev.dhyto.fpl.shared.data.repositories.FplRepository
 import dev.dhyto.fpl.shared.domain.repositories.IFplRepository
-import dev.dhyto.fpl.shared.platformModule
+import dev.dhyto.fpl.shared.presentation.DreamTeamViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -29,6 +29,9 @@ fun sharedModule(enableNetworkLogs: Boolean) = module {
 
     single { FantasyPremierLeagueApi(get()) }
     single<IFplRepository> { FplRepository(get()) }
+    factory {
+        DreamTeamViewModel(get())
+    }
 
 }
 
