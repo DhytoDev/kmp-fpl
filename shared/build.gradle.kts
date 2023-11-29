@@ -30,13 +30,24 @@ kotlin {
     jvm()
 
     sourceSets {
+        all {
+            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
+        }
+
         val commonMain by getting {
             dependencies {
                 // put your Multiplatform dependencies here
                 implementation(project.dependencies.platform(libs.koin.bom))
 
+                implementation(libs.kamel.image)
+
+                implementation(libs.arrow.core)
+                implementation(libs.arrow.fx.coroutines)
+
                 implementation(libs.kotlinx.coroutines)
                 implementation(libs.kotlinx.serialization)
+                implementation(libs.kotlinx.datetime)
 
                 api(libs.koin.core)
                 api(libs.koin.core.coroutines)
@@ -48,9 +59,6 @@ kotlin {
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json)
-
-
-                implementation(libs.kotlinx.datetime)
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
