@@ -15,7 +15,7 @@ data class GeneralInfoDto(
     @SerialName("game_settings")
     val gameSettings: GameSettings,
     val phases: List<Phase>,
-    val teams: List<Team>,
+    val teams: List<TeamDto>,
     @SerialName("total_players")
     val totalPlayers: Int
 )
