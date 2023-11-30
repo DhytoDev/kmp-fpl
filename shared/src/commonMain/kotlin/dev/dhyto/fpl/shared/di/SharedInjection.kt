@@ -1,5 +1,6 @@
 package dev.dhyto.fpl.shared.di
 
+import arrow.fx.coroutines.continuations.resource
 import dev.dhyto.fpl.shared.data.remote.FantasyPremierLeagueApi
 import dev.dhyto.fpl.shared.data.repositories.FplRepository
 import dev.dhyto.fpl.shared.domain.repositories.IFplRepository
@@ -17,7 +18,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
-fun initKoin(enableNetworkLogs: Boolean = true, appDeclaration: KoinAppDeclaration = {}) =
+fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
         modules(sharedModule(enableNetworkLogs = enableNetworkLogs), platformModule())
@@ -44,6 +45,13 @@ fun createHttpClient(httpClientEngine: HttpClientEngine, json: Json, enableNetwo
             install(Logging) {
                 logger = Logger.DEFAULT
                 level = LogLevel.ALL
+                logger = object: Logger {
+                    override fun log(message: String) {
+                        co.touchlab.kermit.Logger.d(tag = "KtorClient", null) {
+                            message
+                        }
+                    }
+                }
             }
         }
     }
