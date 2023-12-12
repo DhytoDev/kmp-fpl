@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.sqlDelight)
 }
 
 kotlin {
@@ -70,8 +71,6 @@ kotlin {
                 implementation(compose.materialIconsExtended)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-
-
             }
         }
 
@@ -80,6 +79,7 @@ kotlin {
                 implementation(libs.ktor.client.android)
                 implementation(libs.compose.ui)
                 implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.sqlDelight.android.driver)
             }
         }
 
@@ -93,14 +93,25 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation(libs.ktor.client.ios)
+                implementation(libs.sqlDelight.native.driver)
             }
         }
 
         val jvmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.java)
+                implementation(libs.sqlDelight.jvm.driver)
 //            implementation(libs.slf4j)
             }
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("FPLDatabase") {
+            packageName.set("dev.dhyto.fpl.shared")
+//            srcDirs("/databases", "/migrations")
         }
     }
 }

@@ -1,8 +1,4 @@
 [versions]
-arrow = "1.2.0"
-compose = "1.5.4"
-compose-plugin = "1.5.10"
-compose-compiler = "1.5.4"
 agp = "8.1.4"
 android-minSdk = "24"
 android-compileSdk = "34"
@@ -15,20 +11,25 @@ androidx-constraintlayout = "2.1.4"
 androidx-test-junit = "1.1.5"
 androidx-espresso-core = "3.5.1"
 androidx-lifecycle = "2.6.2"
+arrow = "1.2.0"
+compose = "1.5.4"
+compose-plugin = "1.5.10"
+compose-compiler = "1.5.4"
+compose-bom = "2023.03.00"
 coroutines = "1.7.3"
+junit = "4.13.2"
 kamelImage = "0.9.0"
 kermit = "2.0.2"
 kotlinxSerialization = "1.6.0"
 kotlinxDateTime = "0.4.1"
 kotlin = "1.9.20"
-junit = "4.13.2"
 koin = "3.5.1"
 koinCompose = "3.5.1"
 ktor = "2.3.5"
 precompose = "1.5.7"
 org-jetbrains-kotlin-android = "1.8.10"
 lifecycle-runtime-ktx = "2.6.2"
-compose-bom = "2023.03.00"
+sqlDelight = "2.0.0"
 
 [libraries]
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
@@ -87,6 +88,10 @@ ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 
+sqlDelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+sqlDelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqlDelight-jvm-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
+
 [bundles]
 ktor-common = ["ktor-client-core", "ktor-client-json", "ktor-client-logging", "ktor-client-serialization", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json"]
 precompose = ["precompose", "precompose-viewmodel", "precompose-koin"]
@@ -98,3 +103,4 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
