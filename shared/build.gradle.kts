@@ -17,17 +17,18 @@ kotlin {
         }
     }
 
-    jvmToolchain(11)
 
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "17"
             }
         }
     }
 
     jvm()
+
+    jvmToolchain(17)
 
     sourceSets {
         all {
