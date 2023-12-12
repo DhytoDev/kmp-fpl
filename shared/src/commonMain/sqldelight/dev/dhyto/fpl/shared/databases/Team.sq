@@ -1,0 +1,17 @@
+CREATE TABLE teamEntity (
+    id INTEGER PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL,
+    shortName TEXT NOT NULL,
+    code INTEGER NOT NULL
+);
+
+insertTeam:
+INSERT OR REPLACE INTO teamEntity(
+    id, name, shortName, code
+) VALUES (?,?,?,?);
+
+findTeamById:
+SELECT * FROM teamEntity WHERE id = ?;
+
+getAllTeams:
+SELECT  * FROM teamEntity;

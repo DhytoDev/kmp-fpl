@@ -1,0 +1,30 @@
+CREATE TABLE playerEntity (
+    id INTEGER NOT NULL PRIMARY KEY,
+    fullName TEXT NOT NULL,
+    displayName TEXT NOT NULL,
+    totalPoints INTEGER NOT NULL,
+    price REAL NOT NULL,
+    goalsScored INTEGER NOT NULL,
+    assists INTEGER NOT NULL,
+    elementType INTEGER,
+    code INTEGER NOT NULL,
+    cleanSheets INTEGER NOT NULL,
+    saves INTEGER NOT NULL,
+    yellowCards INTEGER NOT NULL,
+    redCards INTEGER NOT NULL,
+    team INTEGER NOT NULL
+);
+
+insertPlayer:
+INSERT OR REPLACE INTO playerEntity(
+id, fullName, displayName, totalPoints, price, goalsScored,
+assists,elementType, code,cleanSheets, saves, yellowCards, redCards, team
+) VALUES (?, ?, ?, ?, ?,
+?, ?,?,?,?,?, ?, ?, ?);
+
+getAllPlayers:
+SELECT * FROM playerEntity;
+
+findPlayerById:
+SELECT * FROM playerEntity WHERE id = ? ;
+
