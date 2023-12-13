@@ -1,15 +1,23 @@
 package dev.dhyto.fpl.shared.domain.entities
 
 data class Player(
-    val id: Int,
+    val id: Int?,
     val name: String,
+    val displayName: String,
     val team: Team,
     val photoUrl: String = "",
     val points: Int,
-    val currentPrice: Double = 0.0,
     val goalsScored: Int = 0,
     val assists: Int = 0,
     val elementType: Int?,
+    val price: Double = 0.0,
+    val totalPoints: Int = 0,
+    val code: Int = 0,
+    val cleanSheets: Int = 0,
+    val goalsConceded: Int = 0,
+    val saves: Int = 0,
+    val yellowCards: Int = 0,
+    val redCards: Int = 0,
 ) {
     companion object {
         const val basePhotoUrl =
@@ -18,7 +26,7 @@ data class Player(
 
     fun getPosition(): String {
         return when (elementType) {
-            1 -> "GK"
+            1 -> "GKP"
             2 -> "DEF"
             3 -> "MID"
             4 -> "FWD"
