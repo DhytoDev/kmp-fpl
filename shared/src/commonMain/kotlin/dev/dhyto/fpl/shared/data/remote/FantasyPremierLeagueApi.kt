@@ -9,11 +9,17 @@ import org.koin.core.component.KoinComponent
 
 class FantasyPremierLeagueApi(
     private val client: HttpClient,
-    private val baseUrl: String = "https://fantasy.premierleague.com/api",
 ) : KoinComponent {
 
-    suspend fun fetchDreamTeam(eventId: Int) =
-        client.get("$baseUrl/dream-team/$eventId").body<DreamTeamSquadDto>()
+    companion object {
+        private val TAG: String = FantasyPremierLeagueApi::class.simpleName.toString()
+    }
 
-    suspend fun fetchBootstrapStaticInfo() = client.get("$baseUrl/bootstrap-static/").body<GeneralInfoDto>()
-}
+    suspend fun fetchDreamTeam(eventId: Int) =
+        client.get("dream-team/$eventId").body<DreamTeamSquadDto>()
+
+    suspend fun fetchBootstrapStaticInfo() =
+        client.get("bootstrap-static/").body<GeneralInfoDto>()
+
+    suspend fun fetchEventStatus() = client.get("event-status/").body<EventStatusDto>()
+
