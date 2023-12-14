@@ -21,14 +21,16 @@ class DreamTeamViewModel(
         .asStateFlow()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.LoadingState)
 
-    fun getDreamTeamSquad(gameWeek: Int) {
+    fun getDreamTeamSquad() {
         viewModelScope.launch {
-            fplRepository.getDreamTeamSquad(gameWeek).fold(
-                ifLeft = { _state.emit(UiState.ErrorState(it.message ?: ""))},
-                ifRight = {
-                    _state.emit(UiState.SuccessState(it))
-                }
-            )
+            fplRepository.currentGameWeek.collect { currentGameWeek ->
+                fplRepository.getDreamTeamSquad(currentGameWeek).fold(
+                    ifLeft = { _state.emit(UiState.ErrorState(it.message ?: "")) },
+                    ifRight = {
+                        _state.emit(UiState.SuccessState(it))
+                    }
+                )
+            }
         }
     }
 }

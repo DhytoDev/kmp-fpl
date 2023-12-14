@@ -6,13 +6,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.dhyto.fpl.shared.domain.entities.Player
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamSection
 import moe.tlaster.precompose.PreComposeApp
+import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.rememberNavigator
@@ -41,10 +41,10 @@ fun App() {
 @Composable
 fun HomeScreen(viewModel: DreamTeamViewModel) {
     LaunchedEffect(Unit) {
-        viewModel.getDreamTeamSquad(13)
+        viewModel.getDreamTeamSquad()
     }
 
-    val uiState: UiState<List<Player>> by viewModel.state.collectAsState()
+    val uiState: UiState<List<Player>> by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.padding(16.dp)
