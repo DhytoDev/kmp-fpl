@@ -84,7 +84,8 @@ class FplRepository(
                     teamHome = teamHome.mapToDomainTeam(),
                     teamAway = teamAway.mapToDomainTeam(),
                     teamHScore = fixtureDto.teamHScore,
-                    teamAScore = fixtureDto.teamAScore
+                    teamAScore = fixtureDto.teamAScore,
+                    kickOffTime = fixtureDto.kickoffTime,
                 )
             }
         }
