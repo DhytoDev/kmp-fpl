@@ -13,11 +13,9 @@ import androidx.compose.ui.unit.dp
 import dev.dhyto.fpl.shared.domain.entities.Fixture
 import dev.dhyto.fpl.shared.domain.entities.Player
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamSection
-
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamViewModel
 import dev.dhyto.fpl.shared.presentation.fixtures.FixturesSection
 import dev.dhyto.fpl.shared.presentation.fixtures.FixturesViewModel
-
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.koin.koinViewModel
