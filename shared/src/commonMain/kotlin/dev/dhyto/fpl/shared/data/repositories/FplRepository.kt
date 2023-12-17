@@ -41,6 +41,77 @@ class FplRepository(
         }
 
         return result
+
+    }
+    override suspend fun getFixtures(gameWeek: Int): Either<Failure, List<Fixture>> {
+        return Either.catch {
+            fplApi.fetchFixtures(gameWeek)
+        }.mapLeft {
+            NetworkFailure(it.message)
+        }.map {
+            return@map it.map { fixtureDto ->
+                val teamHome =
+                    fplDb.teamQueries.findTeamById(fixtureDto.teamH.toLong()).executeAsOne()
+                val teamAway =
+                    fplDb.teamQueries.findTeamById(fixtureDto.teamA.toLong()).executeAsOne()
+
+                Fixture(
+                    code = fixtureDto.code,
+                    gameWeek = fixtureDto.event,
+                    id = fixtureDto.id,
+                    teamHome = teamHome.mapToDomainTeam(),
+                    teamAway = teamAway.mapToDomainTeam(),
+                    teamHScore = fixtureDto.teamHScore,
+                    teamAScore = fixtureDto.teamAScore,
+                    kickOffTime = fixtureDto.kickoffTime,
+                )
+            }
+        }
+    }
+
+    private suspend fun getCurrentGameWeek() {
+        val currentGameWeek = getEventGameWeekStatus().map {
+            it.status.first().event
+        }.getOrNull() ?: 1
+
+        Logger.d("currentGameWeek: $currentGameWeek")
+        _currentGameWeek.emit(currentGameWeek)
+    }
+
+    private suspend fun getEventGameWeekStatus(): Either<Failure, EventStatusDto> {
+        return Either.catch {
+            fplApi.fetchEventStatus()
+        }.mapLeft { NetworkFailure(it.message) }
+    }
+
+    private suspend fun fetchAndCacheBootstrapStaticInfo(): Either<Failure, Unit> {
+        return Either.catch { fplApi.fetchBootstrapStaticInfo() }
+            .mapLeft { NetworkFailure(it.message) }.map { generalInfoDto ->
+                generalInfoDto.teams.forEach { teamDto ->
+                    fplDb.teamQueries.insertTeam(
+                        teamDto.id.toLong(), teamDto.name, teamDto.shortName, teamDto.code.toLong()
+                    )
+                }
+
+                generalInfoDto.elements.forEach { element ->
+                    fplDb.playerQueries.insertPlayer(
+                        element.id.toLong(),
+                        "${element.firstName} ${element.secondName}",
+                        element.webName,
+                        element.totalPoints.toLong(),
+                        (element.nowCost / 10).toDouble(),
+                        element.goalsScored.toLong(),
+                        element.assists.toLong(),
+                        element.elementType.toLong(),
+                        element.code.toLong(),
+                        element.cleanSheets.toLong(),
+                        element.saves.toLong(),
+                        element.yellowCards.toLong(),
+                        element.redCards.toLong(),
+                        element.team.toLong(),
+                    )
+                }
+            }
     }
 
     private suspend fun getAllPlayers(): Either<Failure, List<Player>> {
