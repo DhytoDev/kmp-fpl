@@ -21,7 +21,7 @@ class DreamTeamViewModel(
     val state: StateFlow<UiState<List<Player>>> = _state
         .asStateFlow()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.LoadingState)
-    
+
     fun getDreamTeamSquad() {
         viewModelScope.launch {
             fplRepository.currentGameWeek.collect { currentGameWeek ->

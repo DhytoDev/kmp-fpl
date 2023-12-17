@@ -6,6 +6,7 @@ import arrow.fx.coroutines.parZip
 import dev.dhyto.fpl.shared.data.remote.FantasyPremierLeagueApi
 import dev.dhyto.fpl.shared.domain.base.Failure
 import dev.dhyto.fpl.shared.domain.base.Failure.NetworkFailure
+import dev.dhyto.fpl.shared.domain.entities.Fixture
 import dev.dhyto.fpl.shared.domain.entities.Player
 import dev.dhyto.fpl.shared.domain.repositories.IFplRepository
 import kotlinx.coroutines.Dispatchers
