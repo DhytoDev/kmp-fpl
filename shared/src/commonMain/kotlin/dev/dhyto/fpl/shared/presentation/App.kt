@@ -57,7 +57,6 @@ fun HomeScreen(
         fixturesViewModel.getCurrentFixtures()
     }
 
-
     val dreamTeamUiState: UiState<List<Player>> by dreamTeamViewModel.state.collectAsStateWithLifecycle()
     val fixturesUiState: UiState<List<Fixture>> by fixturesViewModel.state.collectAsStateWithLifecycle()
 

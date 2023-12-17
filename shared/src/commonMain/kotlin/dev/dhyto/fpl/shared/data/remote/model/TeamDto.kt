@@ -31,6 +31,7 @@ data class TeamDto(
 
     fun mapToDomainTeam(): Team {
         return Team(
+            id = this.id,
             name = this.name,
             shortName = this.shortName,
             code = this.code,
