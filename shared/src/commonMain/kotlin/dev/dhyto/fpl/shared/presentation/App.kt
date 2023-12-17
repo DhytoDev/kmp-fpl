@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.dhyto.fpl.shared.domain.entities.Player
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamSection
+import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamViewModel
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.NavHost
