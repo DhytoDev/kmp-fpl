@@ -9,12 +9,17 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
-fun createHttpClient(httpClientEngine: HttpClientEngine, json: Json, enableNetworkLogs: Boolean) =
+@OptIn(ExperimentalSerializationApi::class)
+fun createHttpClient(httpClientEngine: HttpClientEngine, enableNetworkLogs: Boolean) =
     HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
-            json(json)
+            json(Json {
+                ignoreUnknownKeys = true
+                explicitNulls = false
+            })
         }
 
         defaultRequest {
@@ -35,5 +40,3 @@ fun createHttpClient(httpClientEngine: HttpClientEngine, json: Json, enableNetwo
             }
         }
     }
-
-fun createJson() = Json { isLenient = true; ignoreUnknownKeys = true }

@@ -20,8 +20,7 @@ fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclarat
     }
 
 fun sharedModule(enableNetworkLogs: Boolean) = module {
-    single { createJson() }
-    single { createHttpClient(get(), get(), enableNetworkLogs = enableNetworkLogs) }
+    single { createHttpClient(get(), enableNetworkLogs = enableNetworkLogs) }
 
     single { FantasyPremierLeagueApi(get()) }
     single<IFplRepository> { FplRepository(get(), get()) }
