@@ -15,6 +15,10 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
+
+            compilation.apply {
+                kotlinOptions.freeCompilerArgs += arrayOf("-linker-options", "-lsqlite3")
+            }
         }
     }
 
