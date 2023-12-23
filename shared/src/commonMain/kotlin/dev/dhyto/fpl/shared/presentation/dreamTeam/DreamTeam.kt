@@ -3,7 +3,6 @@ package dev.dhyto.fpl.shared.presentation.dreamTeam
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,19 +30,19 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
-fun DreamTeamSection(uiState: UiState<List<Player>>) {
+fun DreamTeamSection(uiState: UiState<PlayersAndFixtures>) {
     when (uiState) {
         is UiState.ErrorState -> Text(text = uiState.message)
         is UiState.InitialState -> CircularProgressIndicator()
         is UiState.LoadingState -> CircularProgressIndicator()
-        is UiState.SuccessState<List<Player>> -> Column {
+        is UiState.SuccessState<PlayersAndFixtures> -> Column {
             Text(
                 "Dream Team",
                 style = MaterialTheme.typography.titleLarge,
             )
             Spacer(modifier = Modifier.height(8.dp))
             LazyRow {
-                itemsIndexed(uiState.data) { _, player ->
+                itemsIndexed(uiState.data.players) { _, player ->
                     DreamTeamCardView(
                         player, modifier = Modifier.padding(end = 8.dp).width(150.dp)
                     )

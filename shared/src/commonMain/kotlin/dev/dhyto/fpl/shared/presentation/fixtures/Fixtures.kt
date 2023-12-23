@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.dhyto.fpl.shared.domain.entities.Fixture
 import dev.dhyto.fpl.shared.presentation.UiState
+import dev.dhyto.fpl.shared.presentation.dreamTeam.PlayersAndFixtures
 import dev.dhyto.fpl.shared.utils.formatDate
 import dev.dhyto.fpl.shared.utils.kickOffDayString
 import io.kamel.image.KamelImage
@@ -29,7 +30,7 @@ import io.kamel.image.asyncPainterResource
 
 @Composable
 fun FixturesSection(
-    fixturesUiState: UiState<List<Fixture>>,
+    fixturesUiState: UiState<PlayersAndFixtures>,
     modifier: Modifier,
 ) {
     Column {
@@ -51,7 +52,7 @@ fun FixturesSection(
             is UiState.InitialState -> Box {}
             is UiState.LoadingState -> Box {}
             is UiState.SuccessState -> LazyColumn {
-                itemsIndexed(fixturesUiState.data.take(5)) { _, fixture ->
+                itemsIndexed(fixturesUiState.data.fixtures.take(5)) { _, fixture ->
                     FixtureItem(
                         fixture = fixture,
                         modifier = Modifier.fillMaxWidth()
