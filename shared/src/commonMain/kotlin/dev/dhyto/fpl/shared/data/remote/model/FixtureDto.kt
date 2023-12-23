@@ -31,5 +31,6 @@ data class FixtureDto(
     @SerialName("team_h_difficulty")
     val teamHDifficulty: Int,
     @SerialName("team_h_score")
-    val teamHScore: Int?
+    val teamHScore: Int?,
+    val difficulty: Int?,
 )

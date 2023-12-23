@@ -4,11 +4,14 @@ import arrow.core.Either
 import dev.dhyto.fpl.shared.domain.base.Failure
 import dev.dhyto.fpl.shared.domain.entities.Fixture
 import dev.dhyto.fpl.shared.domain.entities.Player
-import kotlinx.coroutines.flow.StateFlow
+import dev.dhyto.fpl.shared.domain.entities.Team
 
 interface IFplRepository {
-    val currentGameWeek: StateFlow<Int>
     suspend fun getDreamTeamSquad(gameWeek: Int): Either<Failure, List<Player>>
 
     suspend fun getFixtures(gameWeek: Int): Either<Failure, List<Fixture>>
+
+    suspend fun currentGameWeek() : Int
+
+    suspend fun findTeamById(teamId: Int) : Team
 }

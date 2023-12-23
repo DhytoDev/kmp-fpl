@@ -1,6 +1,5 @@
 package dev.dhyto.fpl.shared.data.repositories
 
-
 import arrow.core.Either
 import arrow.fx.coroutines.parZip
 import co.touchlab.kermit.Logger
@@ -12,13 +11,10 @@ import dev.dhyto.fpl.shared.domain.base.Failure
 import dev.dhyto.fpl.shared.domain.base.Failure.NetworkFailure
 import dev.dhyto.fpl.shared.domain.entities.Fixture
 import dev.dhyto.fpl.shared.domain.entities.Player
+import dev.dhyto.fpl.shared.domain.entities.Team
 import dev.dhyto.fpl.shared.domain.repositories.IFplRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 
@@ -27,21 +23,17 @@ class FplRepository(
     private val fplDb: FPLDatabase,
 ) : IFplRepository, KoinComponent {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
-
-    private var _currentGameWeek: MutableStateFlow<Int> = MutableStateFlow(1)
-
-    override val currentGameWeek = _currentGameWeek.asStateFlow()
-
-    init {
-        coroutineScope.launch {
-            getCurrentGameWeek()
-        }
-    }
-
     override suspend fun getDreamTeamSquad(gameWeek: Int): Either<Failure, List<Player>> {
-        return withContext(Dispatchers.IO) {
-            parZip(ctx = Dispatchers.IO, fa = { getAllPlayers() }, fb = {
+        return parZip(
+            ctx = Dispatchers.IO,
+            fa = {
+                getAllPlayers().map {
+                    it.ifEmpty {
+                        fetchAndCacheBootstrapStaticInfo().getOrNull() ?: emptyList()
+                    }
+                }
+            },
+            fb = {
                 Either.catch {
                     fplApi.fetchDreamTeam(gameWeek)
                 }.mapLeft {
@@ -49,55 +41,56 @@ class FplRepository(
                 }.map {
                     it.team
                 }
-            }) { playerList, dreamTeamList ->
-                val players = playerList.getOrNull() ?: emptyList()
+            }
+        ) { playerList, dreamTeamList ->
+            val players = playerList.getOrNull() ?: emptyList()
 
-                dreamTeamList.map {
-                    val dreamTeamEleven = it.map { d ->
-                        val player = players.first { player ->
-                            player.id == d.element
-                        }
-                        player.copy(points = d.points)
+            dreamTeamList.map {
+                val dreamTeamEleven = it.map { d ->
+                    val player = players.first { player ->
+                        player.id == d.element
                     }
-                    dreamTeamEleven
+                    player.copy(points = d.points)
                 }
+                dreamTeamEleven
             }
         }
     }
 
     override suspend fun getFixtures(gameWeek: Int): Either<Failure, List<Fixture>> {
-        return Either.catch {
-            fplApi.fetchFixtures(gameWeek)
-        }.mapLeft {
-            NetworkFailure(it.message)
-        }.map {
-            return@map it.map { fixtureDto ->
-                val teamHome =
-                    fplDb.teamQueries.findTeamById(fixtureDto.teamH.toLong()).executeAsOne()
-                val teamAway =
-                    fplDb.teamQueries.findTeamById(fixtureDto.teamA.toLong()).executeAsOne()
+        return withContext(Dispatchers.IO) {
+            Either.catch {
+                fplApi.fetchFixtures(gameWeek)
+            }.mapLeft {
+                NetworkFailure(it.message)
+            }.map {
+                return@map it.map { fixtureDto ->
 
-                Fixture(
-                    code = fixtureDto.code,
-                    gameWeek = fixtureDto.event,
-                    id = fixtureDto.id,
-                    teamHome = teamHome.mapToDomainTeam(),
-                    teamAway = teamAway.mapToDomainTeam(),
-                    teamHScore = fixtureDto.teamHScore,
-                    teamAScore = fixtureDto.teamAScore,
-                    kickOffTime = fixtureDto.kickoffTime,
-                )
+                    val teamHome = findTeamById(fixtureDto.teamH)
+                    val teamAway = findTeamById(fixtureDto.teamA)
+
+                    Fixture(
+                        code = fixtureDto.code,
+                        gameWeek = fixtureDto.event,
+                        id = fixtureDto.id,
+                        teamHome = teamHome,
+                        teamAway = teamAway,
+                        teamHScore = fixtureDto.teamHScore,
+                        teamAScore = fixtureDto.teamAScore,
+                        kickOffTime = fixtureDto.kickoffTime,
+                    )
+                }
             }
         }
     }
 
-    private suspend fun getCurrentGameWeek() {
-        val currentGameWeek = getEventGameWeekStatus().map {
-            it.status.first().event
-        }.getOrNull() ?: 1
+    override suspend fun currentGameWeek(): Int {
+        return getEventGameWeekStatus().getOrNull()?.status?.first()?.event ?: 1
+    }
 
-        Logger.d("currentGameWeek: $currentGameWeek")
-        _currentGameWeek.emit(currentGameWeek)
+    override suspend fun findTeamById(teamId: Int): Team {
+        return fplDb.teamQueries.findTeamById(teamId.toLong()).executeAsOneOrNull()
+            ?.mapToDomainTeam() ?: Team(id = teamId)
     }
 
     private suspend fun getEventGameWeekStatus(): Either<Failure, EventStatusDto> {
@@ -106,7 +99,7 @@ class FplRepository(
         }.mapLeft { NetworkFailure(it.message) }
     }
 
-    private suspend fun fetchAndCacheBootstrapStaticInfo(): Either<Failure, Unit> {
+    private suspend fun fetchAndCacheBootstrapStaticInfo(): Either<Failure, List<Player>> {
         return Either.catch { fplApi.fetchBootstrapStaticInfo() }
             .mapLeft { NetworkFailure(it.message) }.map { generalInfoDto ->
                 generalInfoDto.teams.forEach { teamDto ->
@@ -133,6 +126,8 @@ class FplRepository(
                         element.team.toLong(),
                     )
                 }
+
+                return@map getAllPlayers().getOrNull() ?: emptyList<Player>()
             }
     }
 
@@ -143,13 +138,12 @@ class FplRepository(
             }.mapLeft {
                 Failure.LocalFailure(it.message)
             }.map { players ->
-                var playerList = players.executeAsList()
+                val playerList = players.executeAsList()
 
                 Logger.i("${playerList.isEmpty()}", null, "PlayerList")
 
                 if (playerList.isEmpty()) {
-                    fetchAndCacheBootstrapStaticInfo()
-                    playerList = fplDb.playerQueries.getAllPlayers().executeAsList()
+                    return@map emptyList<Player>()
                 }
 
                 playerList.map { player ->
@@ -169,7 +163,6 @@ class FplRepository(
                     )
                 }
             }
-
         }
     }
 }
