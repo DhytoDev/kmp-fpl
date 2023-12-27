@@ -5,6 +5,7 @@ import dev.dhyto.fpl.shared.data.repositories.FplRepository
 import dev.dhyto.fpl.shared.domain.repositories.IFplRepository
 import dev.dhyto.fpl.shared.domain.usecases.GetDreamTeamAndFixtures
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamAndFixturesViewModel
+import dev.dhyto.fpl.shared.presentation.summary.ManagerInfoViewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
@@ -26,6 +27,7 @@ fun sharedModule(enableNetworkLogs: Boolean) = module {
     single<IFplRepository> { FplRepository(get(), get()) }
     factory { GetDreamTeamAndFixtures(get()) }
     factory { DreamTeamAndFixturesViewModel(get()) }
+    factory { ManagerInfoViewModel(get()) }
 }
 
 
