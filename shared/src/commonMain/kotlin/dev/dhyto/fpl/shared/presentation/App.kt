@@ -1,20 +1,21 @@
 package dev.dhyto.fpl.shared.presentation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.dhyto.fpl.shared.core.theme.AppTheme
+import dev.dhyto.fpl.shared.domain.entities.ManagerInfo
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamAndFixturesViewModel
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamSection
 import dev.dhyto.fpl.shared.presentation.dreamTeam.PlayersAndFixtures
 import dev.dhyto.fpl.shared.presentation.fixtures.FixturesSection
+import dev.dhyto.fpl.shared.presentation.summary.ManagerInfoViewModel
 import dev.dhyto.fpl.shared.presentation.summary.SummaryCard
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
@@ -28,7 +29,7 @@ fun App() {
     KoinContext {
         PreComposeApp {
             val navigator = rememberNavigator()
-            MaterialTheme {
+            AppTheme {
                 NavHost(
                     navigator = navigator, initialRoute = "/"
                 ) {
@@ -36,8 +37,12 @@ fun App() {
                         val dreamTeamAndFixturesViewModel =
                             koinViewModel(vmClass = DreamTeamAndFixturesViewModel::class)
 
+                        val managerInfoViewModel =
+                            koinViewModel(vmClass = ManagerInfoViewModel::class)
+
                         HomeScreen(
                             dreamTeamAndFixturesViewModel = dreamTeamAndFixturesViewModel,
+                            managerInfoViewModel = managerInfoViewModel,
                         )
                     }
                 }
@@ -49,27 +54,34 @@ fun App() {
 @Composable
 fun HomeScreen(
     dreamTeamAndFixturesViewModel: DreamTeamAndFixturesViewModel,
+    managerInfoViewModel: ManagerInfoViewModel,
 ) {
     LaunchedEffect(Unit) {
         dreamTeamAndFixturesViewModel.getDreamTeamSquad()
+        managerInfoViewModel.getManagerInfo()
     }
 
     val uiState: UiState<PlayersAndFixtures> by dreamTeamAndFixturesViewModel.state.collectAsStateWithLifecycle()
+    val managerInfoUiState by managerInfoViewModel.state.collectAsStateWithLifecycle()
 
-    Scaffold(
-        modifier = Modifier.padding(16.dp)
-    ) {
+    var managerInfo = ManagerInfo()
+
+    Scaffold {
         Column {
+            if (managerInfoUiState is UiState.SuccessState<ManagerInfo>) {
+                managerInfo = (managerInfoUiState as UiState.SuccessState<ManagerInfo>).data
+            }
+
             SummaryCard(
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.background)
-                    .fillMaxWidth().padding(bottom = 16.dp)
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                managerInfo = managerInfo,
             )
             FixturesSection(
-                fixturesUiState = uiState,
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+                fixturesUiState = uiState, modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
             )
-            DreamTeamSection(uiState)
+            DreamTeamSection(
+                uiState = uiState, modifier = Modifier.padding(horizontal = 16.dp)
+            )
         }
     }
 }

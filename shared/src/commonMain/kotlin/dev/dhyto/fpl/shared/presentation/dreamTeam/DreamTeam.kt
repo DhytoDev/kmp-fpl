@@ -30,7 +30,10 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
-fun DreamTeamSection(uiState: UiState<PlayersAndFixtures>) {
+fun DreamTeamSection(
+    uiState: UiState<PlayersAndFixtures>,
+    modifier: Modifier,
+) {
     when (uiState) {
         is UiState.ErrorState -> Text(text = uiState.message)
         is UiState.InitialState -> CircularProgressIndicator()
@@ -39,9 +42,10 @@ fun DreamTeamSection(uiState: UiState<PlayersAndFixtures>) {
             Text(
                 "Dream Team",
                 style = MaterialTheme.typography.titleLarge,
+                modifier = modifier,
             )
             Spacer(modifier = Modifier.height(8.dp))
-            LazyRow {
+            LazyRow(modifier) {
                 itemsIndexed(uiState.data.players) { _, player ->
                     DreamTeamCardView(
                         player, modifier = Modifier.padding(end = 8.dp).width(150.dp)
@@ -100,7 +104,7 @@ fun DreamTeamCardView(
                     "${player.points} pts",
                     style = MaterialTheme.typography.bodyMedium,
                 )
-                Box (
+                Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(size = 4.dp))
                         .background(MaterialTheme.colorScheme.secondaryContainer)
@@ -110,7 +114,7 @@ fun DreamTeamCardView(
                     Text(
                         player.getPosition(),
                         style = MaterialTheme.typography.bodySmall,
-                        )
+                    )
                 }
             }
         }
