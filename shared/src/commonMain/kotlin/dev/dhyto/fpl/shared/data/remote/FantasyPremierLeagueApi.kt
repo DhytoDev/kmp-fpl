@@ -4,6 +4,7 @@ import dev.dhyto.fpl.shared.data.remote.model.DreamTeamSquadDto
 import dev.dhyto.fpl.shared.data.remote.model.EventStatusDto
 import dev.dhyto.fpl.shared.data.remote.model.FixtureDto
 import dev.dhyto.fpl.shared.data.remote.model.GeneralInfoDto
+import dev.dhyto.fpl.shared.data.remote.model.ManagerInfoDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -26,4 +27,7 @@ class FantasyPremierLeagueApi(
 
     suspend fun fetchFixtures(eventId: Int?) =
         client.get("fixtures/?event=$eventId").body<List<FixtureDto>>()
+
+    suspend fun fetchManagerInfo(managerId: Int) =
+        client.get("entry/$managerId").body<ManagerInfoDto>()
 }
