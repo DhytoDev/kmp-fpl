@@ -10,6 +10,7 @@ import dev.dhyto.fpl.shared.data.sqlDelight.mapper.mapToDomainTeam
 import dev.dhyto.fpl.shared.domain.base.Failure
 import dev.dhyto.fpl.shared.domain.base.Failure.NetworkFailure
 import dev.dhyto.fpl.shared.domain.entities.Fixture
+import dev.dhyto.fpl.shared.domain.entities.ManagerInfo
 import dev.dhyto.fpl.shared.domain.entities.Player
 import dev.dhyto.fpl.shared.domain.entities.Team
 import dev.dhyto.fpl.shared.domain.repositories.IFplRepository
@@ -91,6 +92,16 @@ class FplRepository(
     override suspend fun findTeamById(teamId: Int): Team {
         return fplDb.teamQueries.findTeamById(teamId.toLong()).executeAsOneOrNull()
             ?.mapToDomainTeam() ?: Team(id = teamId)
+    }
+
+    override suspend fun getManagerInfo(managerId: Int): Either<Failure, ManagerInfo> {
+        return Either.catch {
+            fplApi.fetchManagerInfo(managerId)
+        }.mapLeft {
+            NetworkFailure(it.message)
+        }.map {
+            it.toManagerInfo()
+        }
     }
 
     private suspend fun getEventGameWeekStatus(): Either<Failure, EventStatusDto> {
