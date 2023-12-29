@@ -22,6 +22,24 @@ data class Player(
     companion object {
         const val basePhotoUrl =
             "https://resources.premierleague.com/premierleague/photos/players/110x140"
+
+        fun dummyPlayers(): List<Player> {
+            val list = mutableListOf<Player>()
+
+            for (i in 1..5)
+                list.add(
+                    Player(
+                        id = i,
+                        name = "Name $i",
+                        displayName = "Name $i",
+                        elementType = 1,
+                        points = i * 2,
+                        team = Team(id = 1)
+                    )
+                )
+
+            return list
+        }
     }
 
     fun getPosition(): String {
