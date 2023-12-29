@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,51 +23,73 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import dev.dhyto.fpl.shared.core.components.shimmerEffect
 import dev.dhyto.fpl.shared.domain.entities.Player
-import dev.dhyto.fpl.shared.presentation.UiState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
 fun DreamTeamSection(
-    uiState: UiState<PlayersAndFixtures>,
     modifier: Modifier,
+    showLoading: Boolean = true,
+    players: List<Player>,
 ) {
-    when (uiState) {
-        is UiState.ErrorState -> Text(text = uiState.message)
-        is UiState.InitialState -> CircularProgressIndicator()
-        is UiState.LoadingState -> CircularProgressIndicator()
-        is UiState.SuccessState<PlayersAndFixtures> -> Column {
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+        ) {
             Text(
                 "Dream Team",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = modifier,
+                style = MaterialTheme.typography.titleMedium,
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyRow(modifier) {
-                itemsIndexed(uiState.data.players) { _, player ->
-                    DreamTeamCardView(
-                        player, modifier = Modifier.padding(end = 8.dp).width(150.dp)
-                    )
-                }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow(modifier) {
+            itemsIndexed(players) { _, player ->
+                DreamTeamCardView(
+                    player = player,
+                    modifier = Modifier.width(150.dp).padding(end = 8.dp),
+                    showLoading = showLoading
+                )
             }
         }
     }
 }
 
-
 @Composable
 fun DreamTeamCardView(
     player: Player,
     modifier: Modifier,
+    showLoading: Boolean = true,
 ) {
     val painterPlayerResource = asyncPainterResource(player.photoUrl)
     val painterBadgeResource = asyncPainterResource(player.team.teamBadgeUrl)
 
-    Box(modifier = modifier) {
-        Column {
+    Column(modifier) {
+        if (showLoading) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(size = 8.dp))
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .shimmerEffect()
+            )
+            for (i in 1..2) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(size = 8.dp))
+                        .fillMaxWidth(if (i == 2) 0.7F else 1.0F)
+                        .height(10.dp)
+                        .shimmerEffect()
+                )
+            }
+        } else {
             Card(
-                modifier = Modifier.width(150.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Row {
                     KamelImage(
@@ -105,8 +126,7 @@ fun DreamTeamCardView(
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(size = 4.dp))
+                    modifier = Modifier.clip(RoundedCornerShape(size = 4.dp))
                         .background(MaterialTheme.colorScheme.secondaryContainer)
                         .padding(horizontal = 4.dp, vertical = 2.dp)
                         .defaultMinSize(minWidth = 20.dp)

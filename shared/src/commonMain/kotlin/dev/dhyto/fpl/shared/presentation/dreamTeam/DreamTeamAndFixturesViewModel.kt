@@ -16,7 +16,7 @@ class DreamTeamAndFixturesViewModel(
     private val getDreamTeamAndFixtures: GetDreamTeamAndFixtures,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<UiState<PlayersAndFixtures>>(UiState.InitialState)
+    private val _state = MutableStateFlow<UiState<PlayersAndFixtures>>(UiState.LoadingState)
 
     val state = _state
         .asStateFlow()

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.dhyto.fpl.shared.core.theme.AppTheme
 import dev.dhyto.fpl.shared.domain.entities.ManagerInfo
+import dev.dhyto.fpl.shared.domain.entities.Player
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamAndFixturesViewModel
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamSection
 import dev.dhyto.fpl.shared.presentation.dreamTeam.PlayersAndFixtures
@@ -77,10 +78,14 @@ fun HomeScreen(
                 managerInfo = managerInfo,
             )
             FixturesSection(
-                fixturesUiState = uiState, modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
+                showLoading = uiState is UiState.LoadingState,
+                fixtures = (uiState as? UiState.SuccessState)?.data?.fixtures ?: emptyList()
             )
             DreamTeamSection(
-                uiState = uiState, modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                showLoading = uiState is UiState.LoadingState,
+                players = (uiState as? UiState.SuccessState)?.data?.players ?: Player.dummyPlayers()
             )
         }
     }

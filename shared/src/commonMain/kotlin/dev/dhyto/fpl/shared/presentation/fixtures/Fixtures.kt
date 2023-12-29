@@ -7,22 +7,24 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.dhyto.fpl.shared.core.components.shimmerEffect
 import dev.dhyto.fpl.shared.domain.entities.Fixture
-import dev.dhyto.fpl.shared.presentation.UiState
-import dev.dhyto.fpl.shared.presentation.dreamTeam.PlayersAndFixtures
 import dev.dhyto.fpl.shared.utils.formatDate
 import dev.dhyto.fpl.shared.utils.kickOffDayString
 import io.kamel.image.KamelImage
@@ -30,14 +32,15 @@ import io.kamel.image.asyncPainterResource
 
 @Composable
 fun FixturesSection(
-    fixturesUiState: UiState<PlayersAndFixtures>,
     modifier: Modifier,
+    showLoading: Boolean = true,
+    fixtures: List<Fixture>,
 ) {
     Column {
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .background(MaterialTheme.colorScheme.secondaryContainer)
-                .padding(8.dp)
+                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -47,21 +50,28 @@ fun FixturesSection(
                 Text("See All", style = MaterialTheme.typography.bodySmall)
             }
         }
-        when (fixturesUiState) {
-            is UiState.ErrorState -> Box {}
-            is UiState.InitialState -> Box {}
-            is UiState.LoadingState -> Box {}
-            is UiState.SuccessState -> LazyColumn {
-                itemsIndexed(fixturesUiState.data.fixtures.take(5)) { _, fixture ->
-                    FixtureItem(
-                        fixture = fixture,
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
+        LazyColumn(modifier) {
+            if (showLoading) {
+                items(5) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .shimmerEffect()
+                            .fillMaxWidth()
+                            .height(30.dp)
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
-        }
 
+            itemsIndexed(fixtures.take(5)) { _, fixture ->
+                FixtureItem(
+                    fixture = fixture,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
     }
 
 }
@@ -96,7 +106,7 @@ private fun FixtureItem(
                 )
                 Spacer(modifier = Modifier.weight(1.0F))
                 KamelImage(
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(35.dp),
                     resource = homeBadgeResource,
                     contentDescription = fixture.teamHome.name,
                     contentScale = ContentScale.Fit,
@@ -109,12 +119,12 @@ private fun FixtureItem(
         }
 
         if (fixture.teamHScore == null && fixture.teamAScore == null)
-           Column(
-               horizontalAlignment = Alignment.CenterHorizontally
-           ) {
-               Text(fixture.kickOffTime.kickOffDayString(), fontSize = 12.sp)
-               Text(fixture.kickOffTime.formatDate("HH:mm"), fontSize = 12.sp)
-           }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(fixture.kickOffTime.kickOffDayString(), fontSize = 12.sp)
+                Text(fixture.kickOffTime.formatDate("HH:mm"), fontSize = 12.sp)
+            }
         else
             Text(" - ", fontSize = 12.sp)
 
@@ -132,7 +142,7 @@ private fun FixtureItem(
                     Text(fixture.teamAScore.toString(), fontSize = 12.sp)
                 Spacer(modifier = Modifier.width(4.dp))
                 KamelImage(
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(35.dp),
                     resource = awayBadgeResource,
                     contentDescription = fixture.teamHome.name,
                     contentScale = ContentScale.Fit,
