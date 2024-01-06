@@ -38,7 +38,7 @@ fun DreamTeamSection(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
         ) {
             Text(

@@ -24,8 +24,8 @@ internal fun SummaryCard(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         )
     ) {
         SummaryContent(
@@ -43,7 +43,7 @@ internal fun SummaryContent(
     Column(modifier = modifier) {
         Text(
             "Gameweek ${managerInfo.currentGameWeek}",
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.headlineSmall
         )
         Spacer(modifier = Modifier.height(16.dp))
         LazyVerticalGrid(
@@ -81,7 +81,7 @@ fun SummaryItem(
     value: Int,
 ) {
     Column {
-        Text(value.toString(), style = MaterialTheme.typography.titleMedium)
-        Text(title, style = MaterialTheme.typography.bodyMedium)
+        Text(value.toString(), style = MaterialTheme.typography.titleLarge)
+        Text(title, style = MaterialTheme.typography.bodyLarge)
     }
 }
