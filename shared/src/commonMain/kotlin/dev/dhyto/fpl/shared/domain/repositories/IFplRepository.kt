@@ -8,6 +8,8 @@ import dev.dhyto.fpl.shared.domain.entities.Player
 import dev.dhyto.fpl.shared.domain.entities.Team
 
 interface IFplRepository {
+    suspend fun fetchAndCacheBootstrapStaticInfo(): Either<Failure, List<Player>>
+
     suspend fun getDreamTeamSquad(gameWeek: Int): Either<Failure, List<Player>>
 
     suspend fun getFixtures(gameWeek: Int): Either<Failure, List<Fixture>>

@@ -2,10 +2,11 @@ package dev.dhyto.fpl.shared.data.repositories
 
 import arrow.core.Either
 import arrow.fx.coroutines.parZip
-import co.touchlab.kermit.Logger
 import dev.dhyto.fpl.shared.FPLDatabase
 import dev.dhyto.fpl.shared.data.remote.FantasyPremierLeagueApi
+import dev.dhyto.fpl.shared.data.remote.model.Element
 import dev.dhyto.fpl.shared.data.remote.model.EventStatusDto
+import dev.dhyto.fpl.shared.data.remote.model.TeamDto
 import dev.dhyto.fpl.shared.data.sqlDelight.mapper.mapToDomainTeam
 import dev.dhyto.fpl.shared.domain.base.Failure
 import dev.dhyto.fpl.shared.domain.base.Failure.NetworkFailure
@@ -109,40 +110,44 @@ class FplRepository(
             fplApi.fetchEventStatus()
         }.mapLeft { NetworkFailure(it.message) }
     }
-
-    private suspend fun fetchAndCacheBootstrapStaticInfo(): Either<Failure, List<Player>> {
+     override suspend fun fetchAndCacheBootstrapStaticInfo(): Either<Failure, List<Player>> {
         return Either.catch { fplApi.fetchBootstrapStaticInfo() }
             .mapLeft { NetworkFailure(it.message) }.map { generalInfoDto ->
                 generalInfoDto.teams.forEach { teamDto ->
-                    fplDb.teamQueries.insertTeam(
-                        teamDto.id.toLong(), teamDto.name, teamDto.shortName, teamDto.code.toLong()
-                    )
+                    insertTeam(teamDto)
                 }
 
-                generalInfoDto.elements.forEach { element ->
-                    fplDb.playerQueries.insertPlayer(
-                        element.id.toLong(),
-                        "${element.firstName} ${element.secondName}",
-                        element.webName,
-                        element.totalPoints.toLong(),
-                        (element.nowCost / 10).toDouble(),
-                        element.goalsScored.toLong(),
-                        element.assists.toLong(),
-                        element.elementType.toLong(),
-                        element.code.toLong(),
-                        element.cleanSheets.toLong(),
-                        element.saves.toLong(),
-                        element.yellowCards.toLong(),
-                        element.redCards.toLong(),
-                        element.team.toLong(),
-                    )
-                }
+                generalInfoDto.elements.forEach { element -> insertPlayer(element) }
 
                 return@map getAllPlayers().getOrNull() ?: emptyList<Player>()
             }
     }
 
-    private suspend fun getAllPlayers(): Either<Failure, List<Player>> {
+    private fun insertTeam(teamDto: TeamDto) {
+        fplDb.teamQueries.insertTeam(
+            teamDto.id.toLong(), teamDto.name, teamDto.shortName, teamDto.code.toLong()
+        )
+    }
+    private fun insertPlayer(element: Element) {
+        fplDb.playerQueries.insertPlayer(
+            element.id.toLong(),
+            "${element.firstName} ${element.secondName}",
+            element.webName,
+            element.totalPoints.toLong(),
+            (element.nowCost / 10).toDouble(),
+            element.goalsScored.toLong(),
+            element.assists.toLong(),
+            element.elementType.toLong(),
+            element.code.toLong(),
+            element.cleanSheets.toLong(),
+            element.saves.toLong(),
+            element.yellowCards.toLong(),
+            element.redCards.toLong(),
+            element.team.toLong(),
+        )
+    }
+
+     suspend fun getAllPlayers(): Either<Failure, List<Player>> {
         return withContext(Dispatchers.IO) {
             Either.catch {
                 fplDb.playerQueries.getAllPlayers()
@@ -150,8 +155,6 @@ class FplRepository(
                 Failure.LocalFailure(it.message)
             }.map { players ->
                 val playerList = players.executeAsList()
-
-                Logger.i("${playerList.isEmpty()}", null, "PlayerList")
 
                 if (playerList.isEmpty()) {
                     return@map emptyList<Player>()
