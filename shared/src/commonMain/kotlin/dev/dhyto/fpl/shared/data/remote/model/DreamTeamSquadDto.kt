@@ -1,7 +1,7 @@
 package dev.dhyto.fpl.shared.data.remote.model
-import kotlinx.serialization.Serializable
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 
 @Serializable
@@ -13,13 +13,13 @@ data class DreamTeamSquadDto(
 
 @Serializable
 data class DreamTeamMember(
-    val element: Int,
-    val points: Int,
-    val position: Int
+    val element: Int = 0,
+    val points: Int = 0,
+    val position: Int = 0
 )
 
 @Serializable
 data class TopPlayer(
-    val id: Int,
-    val points: Int
+    val id: Int = 0,
+    val points: Int = 0
 )
