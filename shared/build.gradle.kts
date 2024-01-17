@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.sqlDelight)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -42,6 +43,7 @@ kotlin {
         }
 
         val commonMain by getting {
+
             dependencies {
                 // put your Multiplatform dependencies here
                 implementation(project.dependencies.platform(libs.koin.bom))
@@ -62,10 +64,7 @@ kotlin {
 
                 implementation(libs.bundles.ktor.common)
 
-                implementation(libs.ktor.client.core)
-                implementation(libs.ktor.client.content.negotiation)
-                implementation(libs.ktor.serialization.kotlinx.json)
-                implementation(libs.ktor.client.logging)
+                implementation(libs.ktor.client.mock)
                 implementation(libs.logging.kermit)
 
                 implementation(compose.runtime)
@@ -108,6 +107,41 @@ kotlin {
 //            implementation(libs.slf4j)
             }
         }
+
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(libs.mockative)
+                implementation(libs.bundles.shared.common.test)
+            }
+        }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+                implementation(kotlin("test"))
+            }
+        }
+
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+                implementation("junit:junit:4.13.2")
+                implementation(libs.sqlDelight.jvm.driver)
+            }
+        }
+
+        val iosX64Test by getting
+        val iosArm64Test by getting
+        val iosSimulatorArm64Test by getting
+        val iosTest by creating {
+            dependsOn(commonTest)
+            iosX64Test.dependsOn(this)
+            iosArm64Test.dependsOn(this)
+            iosSimulatorArm64Test.dependsOn(this)
+        }
     }
 }
 
@@ -135,4 +169,13 @@ android {
     dependencies {
         coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     }
+}
+
+dependencies {
+    //    add("kspCommonMainMetadata", )
+    configurations
+        .filter { it.name.startsWith("ksp") && it.name.contains("Test") }
+        .forEach {
+            add(it.name, "io.mockative:mockative-processor:2.0.1")
+        }
 }
