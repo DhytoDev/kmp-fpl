@@ -1,6 +1,5 @@
-package dev.dhyto.fpl.shared.data.repositories
+package dev.dhyto.fpl.shared.data.model
 
-import MockGeneralInfo
 import co.touchlab.kermit.Logger
 import dev.dhyto.fpl.shared.data.remote.model.DreamTeamMember
 import dev.dhyto.fpl.shared.data.remote.model.DreamTeamSquadDto
@@ -45,42 +44,52 @@ object ApiMock {
         addHandler { req ->
             Logger.d("fullUrl: ${req.url.fullUrl}")
 
-            if(isSuccess == true) {
+            val headers = headersOf(
+                "Content-Type", ContentType.Application.Json.toString()
+            )
+
+            if (isSuccess == true) {
                 when (req.url.encodedPath) {
                     "/api/bootstrap-static/" -> {
                         respond(
                             content = MockGeneralInfo.SUCCESS,
                             status = HttpStatusCode.OK,
-                            headers = headersOf(
-                                "Content-Type",
-                                ContentType.Application.Json.toString()
-                            )
+                            headers = headers
                         )
                     }
-                    "/api/dream-team/1" -> {
+
+                    "/api/dream-team/21" -> {
                         respond(
                             content = Json.encodeToString(
                                 serializer = DreamTeamSquadDto.serializer(),
                                 value = dreamTeamSquad
                             ),
                             status = HttpStatusCode.OK,
-                            headers = headersOf(
-                                "Content-Type",
-                                ContentType.Application.Json.toString()
-                            )
+                            headers = headers
                         )
                     }
+
+                    "/api/event-status/" -> {
+                        respond(
+                            content = MockEventStatus.SUCCESS,
+                            status = HttpStatusCode.OK,
+                            headers = headers
+                        )
+                    }
+
                     else -> {
                         error("Unhandled : ${req.url.fullUrl}")
                     }
                 }
             } else {
                 respondError(
-                    status = HttpStatusCode.InternalServerError,
-                    headers = headersOf(
-                        "Content-Type",
-                        ContentType.Application.Json.toString()
-                    )
+                    status = HttpStatusCode.InternalServerError, headers = headers,
+                    content = """
+                        {
+                            "status": 500,
+                            "message": "Internal Server Error"
+                        }
+                    """.trimIndent()
                 )
             }
         }

@@ -1,3 +1,5 @@
+package dev.dhyto.fpl.shared.data.model
+
 object MockGeneralInfo {
     const val SUCCESS = """
         {

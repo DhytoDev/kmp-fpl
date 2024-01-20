@@ -2,6 +2,7 @@ package dev.dhyto.fpl.shared.data.repositories
 
 import arrow.core.Either
 import arrow.fx.coroutines.parZip
+import co.touchlab.kermit.Logger
 import dev.dhyto.fpl.shared.FPLDatabase
 import dev.dhyto.fpl.shared.data.remote.FantasyPremierLeagueApi
 import dev.dhyto.fpl.shared.data.remote.model.Element
@@ -34,11 +35,11 @@ class FplRepository(
                         fetchAndCacheBootstrapStaticInfo().getOrNull() ?: emptyList()
                     }
                 }
-            },
-            fb = {
+            }, fb = {
                 Either.catch {
                     fplApi.fetchDreamTeam(gameWeek)
                 }.mapLeft {
+                    Logger.e(it.message.toString())
                     NetworkFailure(it.message)
                 }.map {
                     it.team
@@ -86,9 +87,8 @@ class FplRepository(
         }
     }
 
-    override suspend fun currentGameWeek(): Int {
-        return getEventGameWeekStatus().getOrNull()?.status?.first()?.event ?: 1
-    }
+    override suspend fun currentGameWeek(): Int =
+        getEventGameWeekStatus().getOrNull()?.status?.first()?.event ?: 1
 
     override suspend fun findTeamById(teamId: Int): Team {
         return fplDb.teamQueries.findTeamById(teamId.toLong()).executeAsOneOrNull()
@@ -106,13 +106,13 @@ class FplRepository(
     }
 
     private suspend fun getEventGameWeekStatus(): Either<Failure, EventStatusDto> {
-        return Either.catch {
-            fplApi.fetchEventStatus()
-        }.mapLeft { NetworkFailure(it.message) }
+        return Either.catch { fplApi.fetchEventStatus() }.mapLeft { NetworkFailure(it.message) }
     }
-     override suspend fun fetchAndCacheBootstrapStaticInfo(): Either<Failure, List<Player>> {
+
+    override suspend fun fetchAndCacheBootstrapStaticInfo(): Either<Failure, List<Player>> {
         return Either.catch { fplApi.fetchBootstrapStaticInfo() }
-            .mapLeft { NetworkFailure(it.message) }.map { generalInfoDto ->
+            .mapLeft { NetworkFailure(it.message) }
+            .map { generalInfoDto ->
                 generalInfoDto.teams.forEach { teamDto ->
                     insertTeam(teamDto)
                 }
@@ -128,6 +128,7 @@ class FplRepository(
             teamDto.id.toLong(), teamDto.name, teamDto.shortName, teamDto.code.toLong()
         )
     }
+
     private fun insertPlayer(element: Element) {
         fplDb.playerQueries.insertPlayer(
             element.id.toLong(),
@@ -147,7 +148,7 @@ class FplRepository(
         )
     }
 
-     suspend fun getAllPlayers(): Either<Failure, List<Player>> {
+    suspend fun getAllPlayers(): Either<Failure, List<Player>> {
         return withContext(Dispatchers.IO) {
             Either.catch {
                 fplDb.playerQueries.getAllPlayers()
