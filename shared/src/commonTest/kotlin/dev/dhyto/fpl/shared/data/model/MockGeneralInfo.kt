@@ -122,6 +122,29 @@ object MockGeneralInfo {
                     "strength_defence_home": 1320,
                     "strength_defence_away": 1370,
                     "pulse_id": 11
+                },
+                 {
+                    "code": 6,
+                    "draw": 0,
+                    "form": null,
+                    "id": 18,
+                    "loss": 0,
+                    "name": "Spurs",
+                    "played": 0,
+                    "points": 0,
+                    "position": 0,
+                    "short_name": "TOT",
+                    "strength": 3,
+                    "team_division": null,
+                    "unavailable": false,
+                    "win": 0,
+                    "strength_overall_home": 1150,
+                    "strength_overall_away": 1190,
+                    "strength_attack_home": 1120,
+                    "strength_attack_away": 1150,
+                    "strength_defence_home": 1180,
+                    "strength_defence_away": 1230,
+                    "pulse_id": 21
                 }
             ],
             "elements": [

@@ -57,7 +57,6 @@ object ApiMock {
                             headers = headers
                         )
                     }
-
                     "/api/dream-team/21" -> {
                         respond(
                             content = Json.encodeToString(
@@ -68,7 +67,6 @@ object ApiMock {
                             headers = headers
                         )
                     }
-
                     "/api/event-status/" -> {
                         respond(
                             content = MockEventStatus.SUCCESS,
@@ -76,7 +74,13 @@ object ApiMock {
                             headers = headers
                         )
                     }
-
+                    "/api/fixtures/" -> {
+                        respond(
+                            content = MockFixture.SUCCESS,
+                            status = HttpStatusCode.OK,
+                            headers = headers
+                        )
+                    }
                     else -> {
                         error("Unhandled : ${req.url.fullUrl}")
                     }
