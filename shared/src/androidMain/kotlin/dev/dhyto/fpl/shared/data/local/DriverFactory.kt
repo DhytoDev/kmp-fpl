@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.data.sqlDelight
+package dev.dhyto.fpl.shared.data.local
 
 import android.content.Context
 import app.cash.sqldelight.db.SqlDriver

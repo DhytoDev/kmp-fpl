@@ -4,11 +4,11 @@ import arrow.core.Either
 import arrow.fx.coroutines.parZip
 import co.touchlab.kermit.Logger
 import dev.dhyto.fpl.shared.FPLDatabase
+import dev.dhyto.fpl.shared.data.local.mapper.mapToDomainTeam
 import dev.dhyto.fpl.shared.data.remote.FantasyPremierLeagueApi
 import dev.dhyto.fpl.shared.data.remote.model.Element
 import dev.dhyto.fpl.shared.data.remote.model.EventStatusDto
 import dev.dhyto.fpl.shared.data.remote.model.TeamDto
-import dev.dhyto.fpl.shared.data.sqlDelight.mapper.mapToDomainTeam
 import dev.dhyto.fpl.shared.domain.base.Failure
 import dev.dhyto.fpl.shared.domain.base.Failure.NetworkFailure
 import dev.dhyto.fpl.shared.domain.entities.Fixture

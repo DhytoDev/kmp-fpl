@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.data.sqlDelight.mapper
+package dev.dhyto.fpl.shared.data.local.mapper
 
 import dev.dhyto.fpl.shared.databases.TeamEntity
 import dev.dhyto.fpl.shared.domain.entities.Team
