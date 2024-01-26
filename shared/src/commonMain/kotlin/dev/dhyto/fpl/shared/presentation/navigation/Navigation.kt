@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamAndFixturesViewModel
 import dev.dhyto.fpl.shared.presentation.home.HomeScreen
 import dev.dhyto.fpl.shared.presentation.summary.ManagerInfoViewModel
+import dev.dhyto.fpl.shared.presentation.team.MyTeamScreen
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
@@ -28,6 +29,7 @@ fun Navigation(navigator: Navigator) {
             )
         }
         scene(route = NavigationRoute.MyTeamRoute.route) {
+            MyTeamScreen(navigator)
         }
         scene(route = NavigationRoute.OthersRoute.route) {
         }

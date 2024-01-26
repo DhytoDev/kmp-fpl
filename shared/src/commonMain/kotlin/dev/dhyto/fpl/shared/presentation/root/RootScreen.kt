@@ -12,21 +12,22 @@ import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
-fun RootScreen(navigator: Navigator) {
-    Scaffold(bottomBar = {
-        when (currentRoute(navigator)) {
-            NavigationRoute.HomeRoute.route,
-            NavigationRoute.MyTeamRoute.route,
-            NavigationRoute.OthersRoute.route,
-            -> BottomNavigationUI(navigator)
-        }
-    }) {
+internal fun RootScreen(navigator: Navigator) {
+    Scaffold(
+        bottomBar = {
+            when (currentRoute(navigator)) {
+                NavigationRoute.HomeRoute.route,
+                NavigationRoute.MyTeamRoute.route,
+                NavigationRoute.OthersRoute.route,
+                -> BottomNavigationBar(navigator)
+            }
+        }) {
         Navigation(navigator)
     }
 }
 
 @Composable
-fun BottomNavigationUI(navigator: Navigator) {
+private fun BottomNavigationBar(navigator: Navigator) {
     BottomAppBar {
         val items = listOf(
             NavigationRoute.HomeRoute,
