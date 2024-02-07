@@ -1,6 +1,7 @@
 package dev.dhyto.fpl.shared.data.usecases
 
 import dev.dhyto.fpl.shared.FPLDatabase
+import dev.dhyto.fpl.shared.data.data_source.FplDataSource
 import dev.dhyto.fpl.shared.data.model.ApiMock
 import dev.dhyto.fpl.shared.data.model.ApiMock.givenFailure
 import dev.dhyto.fpl.shared.data.model.ApiMock.givenSuccess
@@ -22,7 +23,9 @@ class GetDreamTeamAndFixturesTest {
 
     private val fplAPi = FantasyPremierLeagueApi(client)
 
-    private val fplRepository = FplRepository(fplAPi, fplDb)
+    private val fplDataSource = FplDataSource(fplAPi, fplDb)
+
+    private val fplRepository = FplRepository(fplDataSource)
 
     @Test
     fun getDreamTeamAndFixtures() = runTest {

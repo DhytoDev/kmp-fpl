@@ -15,6 +15,7 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalSerializationApi::class)
 fun createHttpClient(httpClientEngine: HttpClientEngine, enableNetworkLogs: Boolean) =
     HttpClient(httpClientEngine) {
+        expectSuccess = true
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
@@ -40,3 +41,4 @@ fun createHttpClient(httpClientEngine: HttpClientEngine, enableNetworkLogs: Bool
             }
         }
     }
+

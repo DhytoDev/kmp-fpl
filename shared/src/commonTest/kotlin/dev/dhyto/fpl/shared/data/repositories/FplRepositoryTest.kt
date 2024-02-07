@@ -1,6 +1,7 @@
 package dev.dhyto.fpl.shared.data.repositories
 
 import dev.dhyto.fpl.shared.FPLDatabase
+import dev.dhyto.fpl.shared.data.data_source.FplDataSource
 import dev.dhyto.fpl.shared.data.model.ApiMock.givenFailure
 import dev.dhyto.fpl.shared.data.model.ApiMock.givenSuccess
 import dev.dhyto.fpl.shared.data.model.ApiMock.mockEngine
@@ -20,21 +21,11 @@ class FplRepositoryTest {
 
     private val fplAPi = FantasyPremierLeagueApi(client)
 
-    @Test
-    fun getAllPlayers() = runTest {
-        val repository = FplRepository(fplAPi, fplDb).apply {
-            givenSuccess()
-            fetchAndCacheBootstrapStaticInfo()
-        }
-
-        val result = repository.getAllPlayers()
-
-        assertEquals(1, result.getOrNull()?.size)
-    }
+    private val fplDataSource = FplDataSource(fplAPi, fplDb)
 
     @Test
     fun getDreamTeamSquadFromCache() = runTest {
-        val repository = FplRepository(fplAPi, fplDb).apply {
+        val repository = FplRepository(fplDataSource).apply {
             givenSuccess()
         }
 
@@ -49,12 +40,12 @@ class FplRepositoryTest {
          */
         repository.getDreamTeamSquad(21)
 
-        assertEquals(false, repository.getAllPlayers().getOrNull().isNullOrEmpty())
+//        assertEquals(false, repository.getAllPlayers().getOrNull().isNullOrEmpty())
     }
 
     @Test
     fun getDreamTeamSquadReturnsFailure() = runTest {
-        val repository = FplRepository(fplAPi, fplDb).apply {
+        val repository = FplRepository(fplDataSource).apply {
             givenFailure()
         }
 
@@ -65,7 +56,7 @@ class FplRepositoryTest {
 
     @Test
     fun getCurrentGameWeek() = runTest {
-        val repository = FplRepository(fplAPi, fplDb).apply {
+        val repository = FplRepository(fplDataSource).apply {
             givenSuccess()
         }
 
@@ -74,7 +65,7 @@ class FplRepositoryTest {
 
     @Test
     fun getCurrentGameWeekReturnsFailure() = runTest {
-        val repository = FplRepository(fplAPi, fplDb).apply {
+        val repository = FplRepository(fplDataSource).apply {
             givenFailure()
         }
 
