@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamAndFixturesViewModel
 import dev.dhyto.fpl.shared.presentation.home.HomeScreen
+import dev.dhyto.fpl.shared.presentation.login.SignInScreen
 import dev.dhyto.fpl.shared.presentation.summary.ManagerInfoViewModel
 import dev.dhyto.fpl.shared.presentation.team.MyTeamScreen
+import dev.dhyto.fpl.shared.presentation.team.MyTeamViewModel
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
@@ -29,9 +31,18 @@ fun Navigation(navigator: Navigator) {
             )
         }
         scene(route = NavigationRoute.MyTeamRoute.route) {
-            MyTeamScreen(navigator)
+            val myTeamViewModel = koinViewModel(vmClass = MyTeamViewModel::class)
+
+            MyTeamScreen(
+                navigator = navigator,
+                myTeamViewModel = myTeamViewModel
+            )
         }
         scene(route = NavigationRoute.OthersRoute.route) {
+        }
+
+        scene(route = NavigationRoute.SignInRoute.route) {
+            SignInScreen()
         }
     }
 }

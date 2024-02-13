@@ -19,4 +19,5 @@ sealed class NavigationRoute(
     data object HomeRoute : NavigationRoute("home")
     data object MyTeamRoute : NavigationRoute("my-team")
     data object OthersRoute : NavigationRoute("others")
+    data object SignInRoute : NavigationRoute("sign-in")
 }
