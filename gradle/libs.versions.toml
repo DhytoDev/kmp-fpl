@@ -13,9 +13,10 @@ androidx-espresso-core = "3.5.1"
 androidx-lifecycle = "2.6.2"
 arrow = "1.2.0"
 compose = "1.5.4"
-compose-plugin = "1.5.11"
+compose-material3 = "1.1.2"
+compose-plugin = "1.6.0-rc03"
 compose-compiler = "1.5.4"
-compose-bom = "2023.03.00"
+compose-bom = "2024.01.00"
 coroutines = "1.7.3"
 junit = "4.13.2"
 junitJupiter = "5.8.1"
@@ -52,7 +53,7 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-animation = { module = "androidx.compose.foundation:animation", version.ref = "compose" }
-compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
