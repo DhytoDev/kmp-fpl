@@ -30,6 +30,7 @@ koinCompose = "3.5.1"
 ktor = "2.3.5"
 ksp = "1.9.21-1.0.15"
 mockative = "2.0.1"
+multiplatformSettings = "1.1.1"
 precompose = "1.5.7"
 org-jetbrains-kotlin-android = "1.8.10"
 lifecycle-runtime-ktx = "2.6.2"
@@ -73,6 +74,7 @@ koin-android = { module = "io.insert-koin:koin-android" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-json = { group = "io.ktor", name = "ktor-client-json", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
 ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
@@ -87,6 +89,7 @@ kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime",
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 
 mockative = { module = "io.mockative:mockative", version.ref = "mockative" }
+multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 precompose = { group = "moe.tlaster", name = "precompose", version.ref = "precompose" }
 precompose-viewmodel = { group = "moe.tlaster", name = "precompose-viewmodel", version.ref = "precompose" }
 precompose-koin = { group = "moe.tlaster", name = "precompose-koin", version.ref = "precompose" }
@@ -103,7 +106,7 @@ sqlDelight-jvm-driver = { module = "app.cash.sqldelight:sqlite-driver", version.
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [bundles]
-ktor-common = ["ktor-client-core", "ktor-client-json", "ktor-client-logging", "ktor-client-serialization", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json"]
+ktor-common = ["ktor-client-core", "ktor-client-json", "ktor-client-logging", "ktor-client-serialization", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json", "ktor-client-cio"]
 precompose = ["precompose", "precompose-viewmodel", "precompose-koin"]
 shared-common-test = ["ktor-client-mock", "kotlinx-coroutines-test"]
 

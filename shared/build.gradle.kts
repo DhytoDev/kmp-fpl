@@ -67,6 +67,8 @@ kotlin {
                 implementation(libs.ktor.client.mock)
                 implementation(libs.logging.kermit)
 
+                implementation(libs.multiplatform.settings)
+
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.animation)
@@ -104,6 +106,7 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.java)
                 implementation(libs.sqlDelight.jvm.driver)
+                implementation(compose.preview)
 //            implementation(libs.slf4j)
             }
         }
@@ -172,7 +175,6 @@ android {
 }
 
 dependencies {
-    //    add("kspCommonMainMetadata", )
     configurations
         .filter { it.name.startsWith("ksp") && it.name.contains("Test") }
         .forEach {
