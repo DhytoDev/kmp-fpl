@@ -2,7 +2,7 @@ package dev.dhyto.fpl
 
 import android.app.Application
 import dev.dhyto.fpl.di.appModule
-import dev.dhyto.fpl.shared.di.initKoin
+import dev.dhyto.fpl.di.initKoin
 import moe.tlaster.precompose.BuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

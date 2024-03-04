@@ -1,6 +1,7 @@
-package dev.dhyto.fpl.shared.di
+package dev.dhyto.fpl.di
 
-import dev.dhyto.fpl.shared.data.sqlDelight.DriverFactory
+import dev.dhyto.fpl.data.local.DriverFactory
+import dev.dhyto.fpl.data.local.KeyValuePersistence
 import io.ktor.client.engine.darwin.Darwin
 import org.koin.dsl.module
 
@@ -9,4 +10,5 @@ actual fun platformModule() = module {
     single {
         DriverFactory().createDriver()
     }
+    single { KeyValuePersistence() }
 }

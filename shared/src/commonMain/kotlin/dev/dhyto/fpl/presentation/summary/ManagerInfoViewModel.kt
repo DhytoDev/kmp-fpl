@@ -1,8 +1,8 @@
-package dev.dhyto.fpl.shared.presentation.summary
+package dev.dhyto.fpl.presentation.summary
 
-import dev.dhyto.fpl.shared.domain.entities.ManagerInfo
-import dev.dhyto.fpl.shared.domain.repositories.IFplRepository
-import dev.dhyto.fpl.shared.presentation.UiState
+import dev.dhyto.fpl.domain.entities.ManagerInfo
+import dev.dhyto.fpl.domain.repositories.IFplRepository
+import dev.dhyto.fpl.presentation.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.presentation.team
+package dev.dhyto.fpl.presentation.team
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -27,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.touchlab.kermit.Logger
-import dev.dhyto.fpl.shared.domain.base.Failure
-import dev.dhyto.fpl.shared.presentation.UiState
-import dev.dhyto.fpl.shared.presentation.navigation.NavigationRoute
+import dev.dhyto.fpl.domain.base.Failure
+import dev.dhyto.fpl.presentation.UiState
+import dev.dhyto.fpl.presentation.navigation.NavigationRoute
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.lifecycle.Lifecycle
@@ -134,6 +134,7 @@ internal fun MyTeamScreen(
                             )
                         }
                     }
+
                     else -> {
                         Text(
                             text = tabItems[index],

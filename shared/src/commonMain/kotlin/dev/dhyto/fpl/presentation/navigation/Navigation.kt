@@ -1,17 +1,17 @@
-package dev.dhyto.fpl.shared.presentation.navigation
+package dev.dhyto.fpl.presentation.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamAndFixturesViewModel
-import dev.dhyto.fpl.shared.presentation.home.HomeScreen
-import dev.dhyto.fpl.shared.presentation.login.SignInScreen
-import dev.dhyto.fpl.shared.presentation.login.SignInViewModel
-import dev.dhyto.fpl.shared.presentation.summary.ManagerInfoViewModel
-import dev.dhyto.fpl.shared.presentation.team.MyTeamScreen
-import dev.dhyto.fpl.shared.presentation.team.MyTeamViewModel
+import dev.dhyto.fpl.presentation.dreamTeam.DreamTeamAndFixturesViewModel
+import dev.dhyto.fpl.presentation.home.HomeScreen
+import dev.dhyto.fpl.presentation.login.SignInScreen
+import dev.dhyto.fpl.presentation.login.SignInViewModel
+import dev.dhyto.fpl.presentation.summary.ManagerInfoViewModel
+import dev.dhyto.fpl.presentation.team.MyTeamScreen
+import dev.dhyto.fpl.presentation.team.MyTeamViewModel
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
@@ -51,7 +51,7 @@ fun Navigation(navigator: Navigator) {
             val authViewModel = koinViewModel(SignInViewModel::class)
 
             SignInScreen(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 state = authViewModel.uiState.collectAsState().value,
                 eventHandler = authViewModel::handleEvent,
                 navigator = navigator,

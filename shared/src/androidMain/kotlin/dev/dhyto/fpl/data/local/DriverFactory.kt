@@ -1,9 +1,9 @@
-package dev.dhyto.fpl.shared.data.local
+package dev.dhyto.fpl.data.local
 
 import android.content.Context
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import dev.dhyto.fpl.shared.FPLDatabase
+import dev.dhyto.fpl.FPLDatabase
 
 actual class DriverFactory(private val context: Context) {
     actual fun createDriver(): SqlDriver {

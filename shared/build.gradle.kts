@@ -1,4 +1,5 @@
 plugins {
+//    alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlin.serialization)
@@ -8,6 +9,14 @@ plugins {
 }
 
 kotlin {
+    androidTarget {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+    }
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -23,23 +32,19 @@ kotlin {
         }
     }
 
-
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
-        }
-    }
-
     jvm()
 
     jvmToolchain(17)
 
     sourceSets {
         all {
-            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
-            languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
+            languageSettings {
+                optIn("kotlinx.cinterop.ExperimentalForeignApi")
+                optIn("kotlin.experimental.ExperimentalObjCName")
+                optIn("org.jetbrains.compose.resources.ExperimentalResourceApi")
+                optIn("org.jetbrains.compose.resources.InternalResourceApi")
+            }
+
         }
 
         val commonMain by getting {
@@ -74,19 +79,22 @@ kotlin {
                 implementation(compose.animation)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+//                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+//                implementation(compose.components.uiToolingPreview)
             }
         }
 
         val androidMain by getting {
             dependencies {
+//                dependsOn(commonMain)
                 implementation(libs.ktor.client.android)
                 implementation(libs.compose.ui)
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.sqlDelight.android.driver)
             }
         }
+
 
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -151,27 +159,15 @@ kotlin {
 sqldelight {
     databases {
         create("FPLDatabase") {
-            packageName.set("dev.dhyto.fpl.shared")
+            packageName.set("dev.dhyto.fpl")
 //            srcDirs("/databases", "/migrations")
         }
     }
 }
 
 android {
-    namespace = "dev.dhyto.fpl.shared"
+    namespace = "dev.dhyto.fpl"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
-
-    dependencies {
-        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-    }
 }
 
 dependencies {

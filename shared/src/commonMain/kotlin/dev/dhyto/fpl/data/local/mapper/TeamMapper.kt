@@ -1,7 +1,7 @@
-package dev.dhyto.fpl.shared.data.local.mapper
+package dev.dhyto.fpl.data.local.mapper
 
+import dev.dhyto.fpl.domain.entities.Team
 import dev.dhyto.fpl.shared.databases.TeamEntity
-import dev.dhyto.fpl.shared.domain.entities.Team
 
 fun TeamEntity.mapToDomainTeam(): Team {
     return Team(

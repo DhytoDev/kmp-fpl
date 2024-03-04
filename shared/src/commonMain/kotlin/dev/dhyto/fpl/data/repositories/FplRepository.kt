@@ -1,15 +1,15 @@
-package dev.dhyto.fpl.shared.data.repositories
+package dev.dhyto.fpl.data.repositories
 
 import arrow.core.Either
 import arrow.core.getOrElse
 import arrow.fx.coroutines.parZip
-import dev.dhyto.fpl.shared.data.data_source.IFplDataSource
-import dev.dhyto.fpl.shared.domain.base.Failure
-import dev.dhyto.fpl.shared.domain.entities.Fixture
-import dev.dhyto.fpl.shared.domain.entities.ManagerInfo
-import dev.dhyto.fpl.shared.domain.entities.Player
-import dev.dhyto.fpl.shared.domain.entities.Team
-import dev.dhyto.fpl.shared.domain.repositories.IFplRepository
+import dev.dhyto.fpl.data.data_source.IFplDataSource
+import dev.dhyto.fpl.domain.entities.Fixture
+import dev.dhyto.fpl.domain.entities.ManagerInfo
+import dev.dhyto.fpl.domain.entities.Player
+import dev.dhyto.fpl.domain.entities.Team
+import dev.dhyto.fpl.domain.repositories.IFplRepository
+import dev.dhyto.fpl.domain.base.Failure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext

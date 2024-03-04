@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.domain.entities
+package dev.dhyto.fpl.domain.entities
 
 data class ManagerInfo(
     val currentGameWeek: Int = 0,

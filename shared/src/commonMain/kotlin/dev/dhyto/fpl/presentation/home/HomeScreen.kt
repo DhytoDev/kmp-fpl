@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.presentation.home
+package dev.dhyto.fpl.presentation.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,15 +9,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.dhyto.fpl.shared.domain.entities.ManagerInfo
-import dev.dhyto.fpl.shared.domain.entities.Player
-import dev.dhyto.fpl.shared.presentation.UiState
-import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamAndFixturesViewModel
-import dev.dhyto.fpl.shared.presentation.dreamTeam.DreamTeamSection
-import dev.dhyto.fpl.shared.presentation.dreamTeam.PlayersAndFixtures
-import dev.dhyto.fpl.shared.presentation.fixtures.FixturesSection
-import dev.dhyto.fpl.shared.presentation.summary.ManagerInfoViewModel
-import dev.dhyto.fpl.shared.presentation.summary.SummaryCard
+import dev.dhyto.fpl.domain.entities.ManagerInfo
+import dev.dhyto.fpl.domain.entities.Player
+import dev.dhyto.fpl.presentation.UiState
+import dev.dhyto.fpl.presentation.dreamTeam.DreamTeamAndFixturesViewModel
+import dev.dhyto.fpl.presentation.dreamTeam.DreamTeamSection
+import dev.dhyto.fpl.presentation.dreamTeam.PlayersAndFixtures
+import dev.dhyto.fpl.presentation.fixtures.FixturesSection
+import dev.dhyto.fpl.presentation.summary.ManagerInfoViewModel
+import dev.dhyto.fpl.presentation.summary.SummaryCard
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.navigation.Navigator
 

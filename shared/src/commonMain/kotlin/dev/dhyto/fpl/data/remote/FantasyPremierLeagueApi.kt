@@ -1,10 +1,10 @@
-package dev.dhyto.fpl.shared.data.remote
+package dev.dhyto.fpl.data.remote
 
-import dev.dhyto.fpl.shared.data.remote.model.DreamTeamSquadDto
-import dev.dhyto.fpl.shared.data.remote.model.EventStatusDto
-import dev.dhyto.fpl.shared.data.remote.model.FixtureDto
-import dev.dhyto.fpl.shared.data.remote.model.GeneralInfoDto
-import dev.dhyto.fpl.shared.data.remote.model.ManagerInfoDto
+import dev.dhyto.fpl.data.remote.model.DreamTeamSquadDto
+import dev.dhyto.fpl.data.remote.model.EventStatusDto
+import dev.dhyto.fpl.data.remote.model.FixtureDto
+import dev.dhyto.fpl.data.remote.model.GeneralInfoDto
+import dev.dhyto.fpl.data.remote.model.ManagerInfoDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

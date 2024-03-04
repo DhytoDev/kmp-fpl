@@ -1,6 +1,6 @@
-package dev.dhyto.fpl.shared.di
+package dev.dhyto.fpl.di
 
-import dev.dhyto.fpl.shared.data.local.KeyValuePersistence
+import dev.dhyto.fpl.data.local.KeyValuePersistence
 import io.ktor.client.engine.android.Android
 import org.koin.dsl.module
 

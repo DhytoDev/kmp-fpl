@@ -22,10 +22,6 @@ android {
     namespace = "dev.dhyto.fpl"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
-
     defaultConfig {
         applicationId = "dev.dhyto.fpl"
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -41,8 +37,10 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/*"
-            excludes += "**/*"
+//            excludes += "/META-INF/*"
+//            excludes += "**/*"
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/versions/**"
         }
     }
     buildTypes {

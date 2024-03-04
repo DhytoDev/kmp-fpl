@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.presentation.dreamTeam
+package dev.dhyto.fpl.presentation.dreamTeam
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import dev.dhyto.fpl.shared.core.components.shimmerEffect
-import dev.dhyto.fpl.shared.domain.entities.Player
+import dev.dhyto.fpl.core.components.shimmerEffect
+import dev.dhyto.fpl.domain.entities.Player
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 

@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.presentation.team
+package dev.dhyto.fpl.presentation.team
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Tab

@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.data.remote.model
+package dev.dhyto.fpl.data.remote.model
 
 import kotlinx.serialization.Serializable
 

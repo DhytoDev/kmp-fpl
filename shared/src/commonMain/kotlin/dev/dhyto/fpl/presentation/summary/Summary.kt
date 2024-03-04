@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.presentation.summary
+package dev.dhyto.fpl.presentation.summary
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.dhyto.fpl.shared.domain.entities.ManagerInfo
+import dev.dhyto.fpl.domain.entities.ManagerInfo
 
 @Composable
 internal fun SummaryCard(

@@ -1,6 +1,6 @@
-package dev.dhyto.fpl.shared.di
+package dev.dhyto.fpl.di
 
-import dev.dhyto.fpl.shared.FPLDatabase
+import dev.dhyto.fpl.FPLDatabase
 import org.koin.dsl.module
 
 fun cacheModule() = module {

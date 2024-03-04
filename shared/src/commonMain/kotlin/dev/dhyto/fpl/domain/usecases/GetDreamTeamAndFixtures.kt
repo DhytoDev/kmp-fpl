@@ -1,12 +1,12 @@
-package dev.dhyto.fpl.shared.domain.usecases
+package dev.dhyto.fpl.domain.usecases
 
 import arrow.core.Either
 import arrow.fx.coroutines.parZip
 import co.touchlab.kermit.Logger
-import dev.dhyto.fpl.shared.domain.base.Failure
-import dev.dhyto.fpl.shared.domain.entities.Fixture
-import dev.dhyto.fpl.shared.domain.entities.Player
-import dev.dhyto.fpl.shared.domain.repositories.IFplRepository
+import dev.dhyto.fpl.domain.base.Failure
+import dev.dhyto.fpl.domain.entities.Fixture
+import dev.dhyto.fpl.domain.entities.Player
+import dev.dhyto.fpl.domain.repositories.IFplRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import org.koin.core.component.KoinComponent

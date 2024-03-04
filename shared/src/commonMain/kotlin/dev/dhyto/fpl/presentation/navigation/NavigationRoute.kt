@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.presentation.navigation
+package dev.dhyto.fpl.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

@@ -1,6 +1,6 @@
-package dev.dhyto.fpl.shared.presentation
+package dev.dhyto.fpl.presentation
 
-import dev.dhyto.fpl.shared.domain.base.Failure
+import dev.dhyto.fpl.domain.base.Failure
 
 sealed class UiState<out T> {
     data object InitialState : UiState<Nothing>()

@@ -1,23 +1,24 @@
-package dev.dhyto.fpl.shared.data.data_source
+package dev.dhyto.fpl.data.data_source
 
 import arrow.core.Either
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.some
-import dev.dhyto.fpl.shared.FPLDatabase
-import dev.dhyto.fpl.shared.data.local.mapper.mapToDomainTeam
-import dev.dhyto.fpl.shared.data.remote.FantasyPremierLeagueApi
-import dev.dhyto.fpl.shared.data.remote.model.DreamTeamSquadDto
-import dev.dhyto.fpl.shared.data.remote.model.Element
-import dev.dhyto.fpl.shared.data.remote.model.EventStatusDto
-import dev.dhyto.fpl.shared.data.remote.model.FixtureDto
-import dev.dhyto.fpl.shared.data.remote.model.GeneralInfoDto
-import dev.dhyto.fpl.shared.data.remote.model.ManagerInfoDto
-import dev.dhyto.fpl.shared.data.remote.model.TeamDto
-import dev.dhyto.fpl.shared.domain.base.Failure
-import dev.dhyto.fpl.shared.domain.base.Failure.NetworkFailure
-import dev.dhyto.fpl.shared.domain.entities.Player
-import dev.dhyto.fpl.shared.domain.entities.Team
+import dev.dhyto.fpl.data.local.mapper.mapToDomainTeam
+import dev.dhyto.fpl.data.remote.FantasyPremierLeagueApi
+import dev.dhyto.fpl.data.remote.model.DreamTeamSquadDto
+import dev.dhyto.fpl.data.remote.model.Element
+import dev.dhyto.fpl.data.remote.model.EventStatusDto
+import dev.dhyto.fpl.data.remote.model.FixtureDto
+import dev.dhyto.fpl.data.remote.model.GeneralInfoDto
+import dev.dhyto.fpl.data.remote.model.ManagerInfoDto
+import dev.dhyto.fpl.data.remote.model.TeamDto
+import dev.dhyto.fpl.domain.base.Failure
+import dev.dhyto.fpl.domain.base.Failure.NetworkFailure
+import dev.dhyto.fpl.domain.entities.Player
+import dev.dhyto.fpl.domain.entities.Team
+import dev.dhyto.fpl.FPLDatabase
+
 
 interface IFplDataSource {
     suspend fun fetchBootstrapStaticInfo(): Either<Failure, GeneralInfoDto>

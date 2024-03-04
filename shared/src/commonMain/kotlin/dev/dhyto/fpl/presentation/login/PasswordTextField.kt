@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.presentation.login
+package dev.dhyto.fpl.presentation.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.text.KeyboardActions

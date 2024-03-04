@@ -1,9 +1,9 @@
-package dev.dhyto.fpl.shared.presentation.dreamTeam
+package dev.dhyto.fpl.presentation.dreamTeam
 
-import dev.dhyto.fpl.shared.domain.entities.Fixture
-import dev.dhyto.fpl.shared.domain.entities.Player
-import dev.dhyto.fpl.shared.domain.usecases.GetDreamTeamAndFixtures
-import dev.dhyto.fpl.shared.presentation.UiState
+import dev.dhyto.fpl.domain.entities.Fixture
+import dev.dhyto.fpl.domain.entities.Player
+import dev.dhyto.fpl.domain.usecases.GetDreamTeamAndFixtures
+import dev.dhyto.fpl.presentation.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow

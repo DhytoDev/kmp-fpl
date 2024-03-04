@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.domain.base
+package dev.dhyto.fpl.domain.base
 
 sealed class Failure(open val message: String?) {
     data class NetworkFailure(

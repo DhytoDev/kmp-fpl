@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.data.local
+package dev.dhyto.fpl.data.local
 
 import app.cash.sqldelight.db.SqlDriver
 

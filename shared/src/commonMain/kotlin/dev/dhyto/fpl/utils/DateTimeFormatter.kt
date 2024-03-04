@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.utils
+package dev.dhyto.fpl.utils
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime

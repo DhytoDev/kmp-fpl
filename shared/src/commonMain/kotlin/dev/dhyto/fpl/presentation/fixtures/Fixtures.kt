@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.presentation.fixtures
+package dev.dhyto.fpl.presentation.fixtures
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,10 +23,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.dhyto.fpl.shared.core.components.shimmerEffect
-import dev.dhyto.fpl.shared.domain.entities.Fixture
-import dev.dhyto.fpl.shared.utils.formatDate
-import dev.dhyto.fpl.shared.utils.kickOffDayString
+import dev.dhyto.fpl.core.components.shimmerEffect
+import dev.dhyto.fpl.domain.entities.Fixture
+import dev.dhyto.fpl.utils.formatDate
+import dev.dhyto.fpl.utils.kickOffDayString
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 

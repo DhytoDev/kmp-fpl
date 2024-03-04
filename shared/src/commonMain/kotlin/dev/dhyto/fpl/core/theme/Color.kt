@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.core.theme
+package dev.dhyto.fpl.core.theme
 
 import androidx.compose.ui.graphics.Color
 

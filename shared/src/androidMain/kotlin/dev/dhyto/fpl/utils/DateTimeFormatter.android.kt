@@ -1,5 +1,6 @@
-package dev.dhyto.fpl.shared.utils
+package dev.dhyto.fpl.utils
 
+import dev.dhyto.fpl.utils.convertToLocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.format.DateTimeFormatter
 

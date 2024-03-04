@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.core.components
+package dev.dhyto.fpl.core.components
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable

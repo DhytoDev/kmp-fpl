@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared.di
+package dev.dhyto.fpl.di
 
 import dev.dhyto.fpl.shared.di.initKoin
 

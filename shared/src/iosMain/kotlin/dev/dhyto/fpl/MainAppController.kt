@@ -1,4 +1,4 @@
-package dev.dhyto.fpl.shared
+package dev.dhyto.fpl
 
 import androidx.compose.ui.window.ComposeUIViewController
 import dev.dhyto.fpl.shared.presentation.App

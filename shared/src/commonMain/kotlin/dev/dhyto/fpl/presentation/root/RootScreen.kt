@@ -1,13 +1,13 @@
-package dev.dhyto.fpl.shared.presentation.root
+package dev.dhyto.fpl.presentation.root
 
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import dev.dhyto.fpl.shared.presentation.navigation.Navigation
-import dev.dhyto.fpl.shared.presentation.navigation.NavigationRoute
-import dev.dhyto.fpl.shared.presentation.navigation.currentRoute
+import dev.dhyto.fpl.presentation.navigation.Navigation
+import dev.dhyto.fpl.presentation.navigation.NavigationRoute
+import dev.dhyto.fpl.presentation.navigation.currentRoute
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.ExperimentalResourceApi
