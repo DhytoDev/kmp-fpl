@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.some
+import dev.dhyto.fpl.FPLDatabase
 import dev.dhyto.fpl.data.local.mapper.mapToDomainTeam
 import dev.dhyto.fpl.data.remote.FantasyPremierLeagueApi
 import dev.dhyto.fpl.data.remote.model.DreamTeamSquadDto
@@ -17,7 +18,6 @@ import dev.dhyto.fpl.domain.base.Failure
 import dev.dhyto.fpl.domain.base.Failure.NetworkFailure
 import dev.dhyto.fpl.domain.entities.Player
 import dev.dhyto.fpl.domain.entities.Team
-import dev.dhyto.fpl.FPLDatabase
 
 
 interface IFplDataSource {
@@ -110,7 +110,7 @@ class FplDataSource(
                 name = player.fullName,
                 displayName = player.displayName,
                 team = team.mapToDomainTeam(),
-                photoUrl = "${Player.basePhotoUrl}/p${player.code}.png",
+                photoUrl = "${Player.BASE_PHOTO_URL}/p${player.code}.png",
                 points = player.totalPoints.toInt(),
                 price = player.price,
                 goalsScored = player.goalsScored.toInt(),

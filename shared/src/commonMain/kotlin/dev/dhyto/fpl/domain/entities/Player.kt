@@ -20,7 +20,7 @@ data class Player(
     val redCards: Int = 0,
 ) {
     companion object {
-        const val basePhotoUrl =
+        const val BASE_PHOTO_URL =
             "https://resources.premierleague.com/premierleague/photos/players/110x140"
 
         fun dummyPlayers(): List<Player> {
@@ -28,22 +28,32 @@ data class Player(
 
             val teamBadgeUrl = "https://resources.premierleague.com/premierleague/badges/t1.png"
 
-            for (i in 1..5) list.add(
-                Player(
-                    id = i,
-                    name = "Name $i",
-                    displayName = "Name $i",
-                    elementType = 1,
-                    points = i * 2,
-                    team = Team(
-                        id = 1,
-                        name = "Manchester City",
-                        shortName = "MCI",
-                        code = 1,
-                        teamBadgeUrl = teamBadgeUrl
+
+            for (i in 1..11) {
+                val elementType: Int = when (i) {
+                    1 -> 1
+                    in 2..4 -> 2
+                    in 5..9 -> 3
+                    else -> 4
+                }
+
+                list.add(
+                    Player(
+                        id = i,
+                        name = "Name $i",
+                        displayName = "Name $i",
+                        elementType = elementType,
+                        points = i * 2,
+                        team = Team(
+                            id = 1,
+                            name = "Manchester City",
+                            shortName = "MCI",
+                            code = 1,
+                            teamBadgeUrl = teamBadgeUrl
+                        )
                     )
                 )
-            )
+            }
 
             return list
         }
@@ -55,7 +65,7 @@ data class Player(
             2 -> "DEF"
             3 -> "MID"
             4 -> "FWD"
-            else -> ""
+            else -> throw Exception("unknown position")
         }
     }
 }
