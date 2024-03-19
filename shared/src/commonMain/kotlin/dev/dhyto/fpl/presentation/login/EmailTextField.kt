@@ -11,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import fpl_app.shared.generated.resources.Res
+import fpl_app.shared.generated.resources.label_email
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun EmailTextField(
@@ -26,7 +29,7 @@ internal fun EmailTextField(
         onValueChange = onEmailChanged,
         enabled = enabled,
         label = {
-            Text(text = "")
+            Text(text = stringResource(Res.string.label_email))
         },
         singleLine = true,
         leadingIcon = {

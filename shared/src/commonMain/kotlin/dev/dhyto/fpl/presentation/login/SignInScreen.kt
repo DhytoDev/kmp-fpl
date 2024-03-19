@@ -73,14 +73,17 @@ internal fun SignInForm(
     password: String = "",
     enabled: Boolean = true,
 ) {
-    Column(modifier) {
+    Column(
+        modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         val passwordFocusRequester = FocusRequester()
 
         Image(
-            painter = painterResource(Res.drawable.epl),
+            painterResource(Res.drawable.epl),
             contentDescription = null,
         )
-
+        Spacer(modifier = Modifier.height(16.dp))
         EmailTextField(
             modifier = Modifier.fillMaxWidth(),
             email = email,

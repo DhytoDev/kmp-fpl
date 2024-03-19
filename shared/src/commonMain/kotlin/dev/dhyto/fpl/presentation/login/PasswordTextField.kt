@@ -20,6 +20,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import fpl_app.shared.generated.resources.Res
+import fpl_app.shared.generated.resources.hide_password
+import fpl_app.shared.generated.resources.label_password
+import fpl_app.shared.generated.resources.show_password
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PasswordTextField(
@@ -40,7 +45,7 @@ fun PasswordTextField(
         singleLine = true,
         enabled = enabled,
         label = {
-            Text(text = "")
+            Text(text = stringResource(Res.string.label_password))
         },
         leadingIcon = {
             Icon(imageVector = Icons.Default.Lock, contentDescription = null)
@@ -49,8 +54,8 @@ fun PasswordTextField(
             Icon(
                 modifier = Modifier.clickable(
                     onClickLabel = if (isPasswordHidden) {
-                        "Show Password"
-                    } else "Hide Password"
+                        stringResource(Res.string.show_password)
+                    } else stringResource(Res.string.hide_password)
                 ) {
                     isPasswordHidden = !isPasswordHidden
                 },
