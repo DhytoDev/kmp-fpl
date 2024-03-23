@@ -105,18 +105,7 @@ class FplDataSource(
         return players.map { player ->
             val team = fplDb.teamQueries.findTeamById(player.team).executeAsOne()
 
-            Player(
-                id = player.id.toInt(),
-                name = player.fullName,
-                displayName = player.displayName,
-                team = team.mapToDomainTeam(),
-                photoUrl = "${Player.BASE_PHOTO_URL}/p${player.code}.png",
-                points = player.totalPoints.toInt(),
-                price = player.price,
-                goalsScored = player.goalsScored.toInt(),
-                assists = player.assists.toInt(),
-                elementType = player.elementType?.toInt(),
-            )
+            player.mapToDomain(team)
         }.some()
     }
 
