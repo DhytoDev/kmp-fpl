@@ -1,23 +1,25 @@
 package dev.dhyto.fpl.domain.entities
 
 data class Player(
+//    val assists: Int = 0,
+//    val cleanSheets: Int = 0,
+    val code: Int = 0,
+    val displayName: String,
+    val elementType: Int?,
+//    val goalsConceded: Int = 0,
+//    val goalsScored: Int = 0,
     val id: Int?,
     val name: String,
-    val displayName: String,
-    val team: Team,
     val photoUrl: String = "",
     val points: Int,
-    val goalsScored: Int = 0,
-    val assists: Int = 0,
-    val elementType: Int?,
-    val price: Double = 0.0,
-    val totalPoints: Int = 0,
-    val code: Int = 0,
-    val cleanSheets: Int = 0,
-    val goalsConceded: Int = 0,
-    val saves: Int = 0,
-    val yellowCards: Int = 0,
-    val redCards: Int = 0,
+//    val price: Double = 0.0,
+//    val redCards: Int = 0,
+    val team: Team,
+//    val totalPoints: Int = 0,
+//    val saves: Int = 0,
+//    val yellowCards: Int = 0,
+    val upcomingFixtures: List<Fixture> = emptyList(),
+    val playerStats: PlayerStats?,
 ) {
     companion object {
         const val BASE_PHOTO_URL =
@@ -50,7 +52,8 @@ data class Player(
                             shortName = "MCI",
                             code = 1,
                             teamBadgeUrl = teamBadgeUrl
-                        )
+                        ),
+                        playerStats = null,
                     )
                 )
             }
