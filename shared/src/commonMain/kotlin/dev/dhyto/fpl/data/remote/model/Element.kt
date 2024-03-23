@@ -1,7 +1,5 @@
 package dev.dhyto.fpl.data.remote.model
 
-
-import dev.dhyto.fpl.domain.entities.Player
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

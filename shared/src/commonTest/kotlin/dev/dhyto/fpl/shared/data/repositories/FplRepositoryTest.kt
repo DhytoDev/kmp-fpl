@@ -1,13 +1,15 @@
 package dev.dhyto.fpl.shared.data.repositories
 
-import dev.dhyto.fpl.shared.FPLDatabase
-import dev.dhyto.fpl.shared.data.data_source.FplDataSource
+
+import dev.dhyto.fpl.FPLDatabase
+import dev.dhyto.fpl.data.data_source.FplDataSource
+import dev.dhyto.fpl.data.remote.FantasyPremierLeagueApi
+import dev.dhyto.fpl.data.repositories.FplRepository
+import dev.dhyto.fpl.di.createHttpClient
 import dev.dhyto.fpl.shared.data.model.ApiMock.givenFailure
 import dev.dhyto.fpl.shared.data.model.ApiMock.givenSuccess
 import dev.dhyto.fpl.shared.data.model.ApiMock.mockEngine
-import dev.dhyto.fpl.shared.data.remote.FantasyPremierLeagueApi
 import dev.dhyto.fpl.shared.data.testDbDriverFactory
-import dev.dhyto.fpl.shared.di.createHttpClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
