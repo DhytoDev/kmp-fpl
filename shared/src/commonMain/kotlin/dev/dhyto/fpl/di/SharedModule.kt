@@ -33,7 +33,7 @@ fun sharedModule(enableNetworkLogs: Boolean) = module {
 
     single { FantasyPremierLeagueApi(get()) }
     single { FPLAuthenticationApi() }
-    single<IFplAuthRepository> { FplAuthRepository(get(), get()) }
+    single<IFplAuthRepository> { FplAuthRepository(get(), get(), get()) }
     single<IFplDataSource> { FplDataSource(get(), get(), get()) }
     single<IFplRepository> { FplRepository(get()) }
 

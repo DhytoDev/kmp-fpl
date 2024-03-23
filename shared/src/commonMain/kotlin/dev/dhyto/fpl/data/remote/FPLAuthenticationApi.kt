@@ -78,6 +78,7 @@ class FPLAuthenticationApi : KoinComponent {
 
     companion object {
         const val USER_COOKIE_PREFS = "user_cookie_fpl"
+        const val MANAGER_ID_PREFS = "manager_id"
 
         private val client = HttpClient(CIO).config {
             install(DefaultRequest) {

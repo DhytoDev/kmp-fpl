@@ -6,6 +6,7 @@ import dev.dhyto.fpl.data.remote.model.EventStatusDto
 import dev.dhyto.fpl.data.remote.model.FixtureDto
 import dev.dhyto.fpl.data.remote.model.GeneralInfoDto
 import dev.dhyto.fpl.data.remote.model.ManagerInfoDto
+import dev.dhyto.fpl.data.remote.model.MeDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -41,4 +42,11 @@ class FantasyPremierLeagueApi(
                 append("Cookie", cookie)
             }
         }.body<EntriesDto>()
+
+    suspend fun fetchUserLoggedIn(cookie: String) = client.get {
+        url("me/")
+        headers {
+            append("Cookie", cookie)
+        }
+    }.body<MeDto>()
 }
