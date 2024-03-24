@@ -2,13 +2,20 @@ package dev.dhyto.fpl.data.data_source
 
 import arrow.core.Either
 import arrow.core.Option
+import arrow.core.left
 import arrow.core.none
+import arrow.core.right
 import arrow.core.some
+import com.russhwolf.settings.get
 import dev.dhyto.fpl.FPLDatabase
+import dev.dhyto.fpl.data.local.KeyValuePersistence
+import dev.dhyto.fpl.data.local.mapper.mapToDomain
 import dev.dhyto.fpl.data.local.mapper.mapToDomainTeam
+import dev.dhyto.fpl.data.remote.FPLAuthenticationApi
 import dev.dhyto.fpl.data.remote.FantasyPremierLeagueApi
 import dev.dhyto.fpl.data.remote.model.DreamTeamSquadDto
 import dev.dhyto.fpl.data.remote.model.Element
+import dev.dhyto.fpl.data.remote.model.EntriesDto
 import dev.dhyto.fpl.data.remote.model.EventStatusDto
 import dev.dhyto.fpl.data.remote.model.FixtureDto
 import dev.dhyto.fpl.data.remote.model.GeneralInfoDto
@@ -38,11 +45,14 @@ interface IFplDataSource {
     suspend fun getAllPlayers(): Option<List<Player>>
 
     suspend fun findTeamById(teamId: Int): Option<Team>
+
+    suspend fun getMyTeam(): Either<Failure, EntriesDto>
 }
 
 class FplDataSource(
     private val fplApi: FantasyPremierLeagueApi,
     private val fplDb: FPLDatabase,
+    private val fplPrefs: KeyValuePersistence
 ) : IFplDataSource {
     override suspend fun fetchBootstrapStaticInfo(): Either<Failure, GeneralInfoDto> {
         return Either.catch { fplApi.fetchBootstrapStaticInfo() }
@@ -113,5 +123,20 @@ class FplDataSource(
         val team = fplDb.teamQueries.findTeamById(teamId.toLong()).executeAsOneOrNull()
 
         return team?.mapToDomainTeam()?.some() ?: none()
+    }
+
+    override suspend fun getMyTeam(): Either<Failure, EntriesDto> {
+        val cookie = fplPrefs.settings.get<String>(FPLAuthenticationApi.USER_COOKIE_PREFS)
+        val managerId = fplPrefs.settings.get<Int>(FPLAuthenticationApi.MANAGER_ID_PREFS)
+
+        if (cookie == null || managerId == null) {
+            return Failure.UnauthenticatedFailure().left()
+        }
+
+        return Either.catch {
+            return fplApi.fetchMyTeam(managerId, cookie).right()
+        }.mapLeft {
+            return NetworkFailure(it.message).left()
+        }
     }
 }

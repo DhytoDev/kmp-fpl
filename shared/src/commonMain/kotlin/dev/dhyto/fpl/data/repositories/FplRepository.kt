@@ -4,12 +4,13 @@ import arrow.core.Either
 import arrow.core.getOrElse
 import arrow.fx.coroutines.parZip
 import dev.dhyto.fpl.data.data_source.IFplDataSource
+import dev.dhyto.fpl.domain.base.Failure
 import dev.dhyto.fpl.domain.entities.Fixture
+import dev.dhyto.fpl.domain.entities.ManagerEntry
 import dev.dhyto.fpl.domain.entities.ManagerInfo
 import dev.dhyto.fpl.domain.entities.Player
 import dev.dhyto.fpl.domain.entities.Team
 import dev.dhyto.fpl.domain.repositories.IFplRepository
-import dev.dhyto.fpl.domain.base.Failure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -61,6 +62,8 @@ class FplRepository(
                         teamHScore = fixtureDto.teamHScore,
                         teamAScore = fixtureDto.teamAScore,
                         kickOffTime = fixtureDto.kickoffTime,
+                        difficulty = fixtureDto.difficulty,
+                        isHome = false
                     )
                 }
             }
@@ -75,6 +78,37 @@ class FplRepository(
 
     override suspend fun getManagerInfo(managerId: Int): Either<Failure, ManagerInfo> =
         fplDataSource.fetchManagerInfo(managerId).map { it.toManagerInfo() }
+
+    override suspend fun getMyTeam(): Either<Failure, List<ManagerEntry>> {
+        return parZip(
+            ctx = Dispatchers.IO,
+            fa = {
+                fplDataSource.getAllPlayers()
+                    .getOrElse {
+                        fetchAndCacheBootstrapStaticInfo().getOrElse { emptyList() }
+                    }
+            },
+            fb = {
+                fplDataSource.getMyTeam()
+            }
+        ) { players, entries ->
+            entries.map { entriesDto ->
+                entriesDto.picks!!.map { pickDto ->
+                    val player = players.first { it.id == pickDto?.element }
+
+                    ManagerEntry(
+                        player = player,
+                        isCaptain = pickDto?.isCaptain ?: false,
+                        isViceCaptain = pickDto?.isViceCaptain ?: false,
+                        multiplier = pickDto?.multiplier ?: 1,
+                        position = pickDto?.position ?: 1,
+                        sellingPrice = pickDto?.sellingPrice?.div(10)?.toDouble() ?: 0.0,
+                        purchasePrice = pickDto?.purchasePrice?.div(10)?.toDouble() ?: 0.0,
+                    )
+                }
+            }
+        }
+    }
 
     override suspend fun fetchAndCacheBootstrapStaticInfo(): Either<Failure, List<Player>> {
         return fplDataSource.fetchBootstrapStaticInfo()
