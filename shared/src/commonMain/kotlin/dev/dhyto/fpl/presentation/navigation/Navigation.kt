@@ -11,7 +11,6 @@ import dev.dhyto.fpl.presentation.login.SignInScreen
 import dev.dhyto.fpl.presentation.login.SignInViewModel
 import dev.dhyto.fpl.presentation.summary.ManagerInfoViewModel
 import dev.dhyto.fpl.presentation.team.MyTeamScreen
-import dev.dhyto.fpl.presentation.team.MyTeamViewModel
 import moe.tlaster.precompose.koin.koinViewModel
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
@@ -37,12 +36,7 @@ fun Navigation(navigator: Navigator) {
             )
         }
         scene(route = NavigationRoute.MyTeamRoute.route) {
-            val myTeamViewModel = koinViewModel(vmClass = MyTeamViewModel::class)
-
-            MyTeamScreen(
-                navigator = navigator,
-                myTeamViewModel = myTeamViewModel
-            )
+            MyTeamScreen(navigator)
         }
         scene(route = NavigationRoute.OthersRoute.route) {
         }
