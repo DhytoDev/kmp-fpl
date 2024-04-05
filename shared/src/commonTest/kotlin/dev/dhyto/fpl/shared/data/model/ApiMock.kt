@@ -1,9 +1,9 @@
 package dev.dhyto.fpl.shared.data.model
 
 import co.touchlab.kermit.Logger
-import dev.dhyto.fpl.shared.data.remote.model.DreamTeamMember
-import dev.dhyto.fpl.shared.data.remote.model.DreamTeamSquadDto
-import dev.dhyto.fpl.shared.data.remote.model.TopPlayer
+import dev.dhyto.fpl.data.remote.model.DreamTeamMember
+import dev.dhyto.fpl.data.remote.model.DreamTeamSquadDto
+import dev.dhyto.fpl.data.remote.model.TopPlayer
 import io.ktor.client.engine.config
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
