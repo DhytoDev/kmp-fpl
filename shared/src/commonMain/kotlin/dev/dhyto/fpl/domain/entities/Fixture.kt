@@ -8,9 +8,15 @@ data class Fixture(
     val teamAway: Team,
     val teamHScore: Int?,
     val teamAScore: Int?,
-    val kickOffTime: String,
+    val kickOffTime: String?,
     val difficulty: Int?,
     val isHome: Boolean?,
+)
+
+data class UpcomingOpponent(
+    var gameWeek: Int?,
+    val team : Team?,
+    val difficulty: Int?
 )
 
 //"id": 296,

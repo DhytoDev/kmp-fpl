@@ -72,3 +72,7 @@ data class Player(
         }
     }
 }
+
+data class PlayerSummary(
+    val upcomingOpponents: List<UpcomingOpponent>,
+)

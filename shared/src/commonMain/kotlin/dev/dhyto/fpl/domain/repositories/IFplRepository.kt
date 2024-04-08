@@ -6,6 +6,7 @@ import dev.dhyto.fpl.domain.entities.Fixture
 import dev.dhyto.fpl.domain.entities.ManagerEntry
 import dev.dhyto.fpl.domain.entities.ManagerInfo
 import dev.dhyto.fpl.domain.entities.Player
+import dev.dhyto.fpl.domain.entities.PlayerSummary
 import dev.dhyto.fpl.domain.entities.Team
 
 interface IFplRepository {
@@ -22,4 +23,6 @@ interface IFplRepository {
     suspend fun getManagerInfo(managerId: Int): Either<Failure, ManagerInfo>
 
     suspend fun getMyTeam(): Either<Failure, List<ManagerEntry>>
+
+    suspend fun getPlayerDetails(playerId: Int) : Either<Failure, PlayerSummary>
 }

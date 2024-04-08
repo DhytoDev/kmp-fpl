@@ -2,6 +2,7 @@ package dev.dhyto.fpl.data.repositories
 
 import arrow.core.Either
 import arrow.core.getOrElse
+import arrow.core.right
 import arrow.fx.coroutines.parZip
 import dev.dhyto.fpl.data.data_source.IFplDataSource
 import dev.dhyto.fpl.domain.base.Failure
@@ -9,7 +10,9 @@ import dev.dhyto.fpl.domain.entities.Fixture
 import dev.dhyto.fpl.domain.entities.ManagerEntry
 import dev.dhyto.fpl.domain.entities.ManagerInfo
 import dev.dhyto.fpl.domain.entities.Player
+import dev.dhyto.fpl.domain.entities.PlayerSummary
 import dev.dhyto.fpl.domain.entities.Team
+import dev.dhyto.fpl.domain.entities.UpcomingOpponent
 import dev.dhyto.fpl.domain.repositories.IFplRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -50,11 +53,11 @@ class FplRepository(
             fplDataSource.fetchFixtures(gameWeek).map {
                 return@map it.map { fixtureDto ->
 
-                    val teamHome = findTeamById(fixtureDto.teamH)
-                    val teamAway = findTeamById(fixtureDto.teamA)
+                    val teamHome = findTeamById(fixtureDto.teamH!!)
+                    val teamAway = findTeamById(fixtureDto.teamA!!)
 
                     Fixture(
-                        code = fixtureDto.code,
+                        code = fixtureDto.code!!,
                         gameWeek = fixtureDto.event,
                         id = fixtureDto.id,
                         teamHome = teamHome,
@@ -107,6 +110,23 @@ class FplRepository(
                     )
                 }
             }
+        }
+    }
+
+    override suspend fun getPlayerDetails(playerId: Int): Either<Failure, PlayerSummary> {
+        return fplDataSource.getPlayerDetails(playerId).map { ps ->
+            return PlayerSummary(
+                upcomingOpponents = ps.fixtures.map {
+                    val team =
+                        if (it.isHome == true) findTeamById(it.teamA!!) else findTeamById(it.teamH!!)
+
+                    UpcomingOpponent(
+                        gameWeek = it.event,
+                        team = team,
+                        difficulty = it.difficulty,
+                    )
+                }
+            ).right()
         }
     }
 
