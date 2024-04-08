@@ -122,7 +122,7 @@ private fun FixtureItem(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(fixture.kickOffTime.kickOffDayString(), fontSize = 12.sp)
+                Text(fixture.kickOffTime!!.kickOffDayString(), fontSize = 12.sp)
                 Text(fixture.kickOffTime.formatDate("HH:mm"), fontSize = 12.sp)
             }
         else
