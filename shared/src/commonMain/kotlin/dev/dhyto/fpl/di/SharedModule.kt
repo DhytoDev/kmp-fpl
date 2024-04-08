@@ -10,6 +10,7 @@ import dev.dhyto.fpl.domain.repositories.IFplAuthRepository
 import dev.dhyto.fpl.domain.repositories.IFplRepository
 import dev.dhyto.fpl.domain.usecases.GetDreamTeamAndFixtures
 import dev.dhyto.fpl.domain.usecases.GetMyTeam
+import dev.dhyto.fpl.domain.usecases.GetThreeUpcomingFixtures
 import dev.dhyto.fpl.presentation.dreamTeam.DreamTeamAndFixturesViewModel
 import dev.dhyto.fpl.presentation.login.SignInViewModel
 import dev.dhyto.fpl.presentation.summary.ManagerInfoViewModel
@@ -39,6 +40,7 @@ fun sharedModule(enableNetworkLogs: Boolean) = module {
 
     factory { GetMyTeam(get()) }
     factory { GetDreamTeamAndFixtures(get()) }
+    factory { GetThreeUpcomingFixtures(get()) }
 
     factory { DreamTeamAndFixturesViewModel(get()) }
     factory { ManagerInfoViewModel(get()) }
