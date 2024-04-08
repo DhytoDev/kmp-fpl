@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.Option
 import arrow.core.left
 import arrow.core.none
-import arrow.core.right
 import arrow.core.some
 import com.russhwolf.settings.get
 import dev.dhyto.fpl.FPLDatabase
@@ -20,6 +19,7 @@ import dev.dhyto.fpl.data.remote.model.EventStatusDto
 import dev.dhyto.fpl.data.remote.model.FixtureDto
 import dev.dhyto.fpl.data.remote.model.GeneralInfoDto
 import dev.dhyto.fpl.data.remote.model.ManagerInfoDto
+import dev.dhyto.fpl.data.remote.model.PlayerSummaryDto
 import dev.dhyto.fpl.data.remote.model.TeamDto
 import dev.dhyto.fpl.domain.base.Failure
 import dev.dhyto.fpl.domain.base.Failure.NetworkFailure
@@ -47,6 +47,8 @@ interface IFplDataSource {
     suspend fun findTeamById(teamId: Int): Option<Team>
 
     suspend fun getMyTeam(): Either<Failure, EntriesDto>
+
+    suspend fun getPlayerDetails(playerId: Int): Either<Failure, PlayerSummaryDto>
 }
 
 class FplDataSource(
@@ -134,7 +136,16 @@ class FplDataSource(
         }
 
         return Either.catch {
-            return fplApi.fetchMyTeam(managerId, cookie).right()
+            fplApi.fetchMyTeam(managerId, cookie)
+        }.mapLeft {
+            return NetworkFailure(it.message).left()
+        }
+    }
+
+    override suspend fun getPlayerDetails(playerId: Int): Either<Failure, PlayerSummaryDto> {
+
+        return Either.catch {
+            fplApi.fetchPlayerDetails(playerId)
         }.mapLeft {
             return NetworkFailure(it.message).left()
         }

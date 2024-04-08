@@ -6,49 +6,49 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HistoryPast(
-    val assists: Int,
-    val bonus: Int,
-    val bps: Int,
+    val assists: Int?,
+    val bonus: Int?,
+    val bps: Int?,
     @SerialName("clean_sheets")
-    val cleanSheets: Int,
-    val creativity: String,
+    val cleanSheets: Int?,
+    val creativity: String?,
     @SerialName("element_code")
-    val elementCode: Int,
+    val elementCode: Int?,
     @SerialName("end_cost")
-    val endCost: Int,
+    val endCost: Int?,
     @SerialName("expected_assists")
-    val expectedAssists: String,
+    val expectedAssists: String?,
     @SerialName("expected_goal_involvements")
-    val expectedGoalInvolvements: String,
+    val expectedGoalInvolvements: String?,
     @SerialName("expected_goals")
-    val expectedGoals: String,
+    val expectedGoals: String?,
     @SerialName("expected_goals_conceded")
-    val expectedGoalsConceded: String,
+    val expectedGoalsConceded: String?,
     @SerialName("goals_conceded")
-    val goalsConceded: Int,
+    val goalsConceded: Int?,
     @SerialName("goals_scored")
-    val goalsScored: Int,
+    val goalsScored: Int?,
     @SerialName("ict_index")
-    val ictIndex: String,
-    val influence: String,
-    val minutes: Int,
+    val ictIndex: String?,
+    val influence: String?,
+    val minutes: Int?,
     @SerialName("own_goals")
-    val ownGoals: Int,
+    val ownGoals: Int?,
     @SerialName("penalties_missed")
-    val penaltiesMissed: Int,
+    val penaltiesMissed: Int?,
     @SerialName("penalties_saved")
-    val penaltiesSaved: Int,
+    val penaltiesSaved: Int?,
     @SerialName("red_cards")
-    val redCards: Int,
-    val saves: Int,
+    val redCards: Int?,
+    val saves: Int?,
     @SerialName("season_name")
-    val seasonName: String,
+    val seasonName: String?,
     @SerialName("start_cost")
-    val startCost: Int,
-    val starts: Int,
-    val threat: String,
-    @SerialName("total_points")
-    val totalPoints: Int,
+    val startCost: Int?,
+    val starts: Int?,
+    val threat: String?,
+    @SerialName("total_poInts")
+    val totalPoInts: Int?,
     @SerialName("yellow_cards")
-    val yellowCards: Int
+    val yellowCards: Int?
 )
