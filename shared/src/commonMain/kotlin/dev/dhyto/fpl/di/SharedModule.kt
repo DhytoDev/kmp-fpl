@@ -15,6 +15,7 @@ import dev.dhyto.fpl.presentation.dreamTeam.DreamTeamAndFixturesViewModel
 import dev.dhyto.fpl.presentation.login.SignInViewModel
 import dev.dhyto.fpl.presentation.summary.ManagerInfoViewModel
 import dev.dhyto.fpl.presentation.team.MyTeamViewModel
+import dev.dhyto.fpl.presentation.team.PlayerSummaryViewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
@@ -44,8 +45,9 @@ fun sharedModule(enableNetworkLogs: Boolean) = module {
 
     factory { DreamTeamAndFixturesViewModel(get()) }
     factory { ManagerInfoViewModel(get()) }
-    factory { MyTeamViewModel(get()) }
+    factory { MyTeamViewModel(get(), get()) }
     factory { SignInViewModel(get()) }
+    factory { PlayerSummaryViewModel(get()) }
 }
 
 
