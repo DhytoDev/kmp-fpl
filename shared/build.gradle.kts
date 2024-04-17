@@ -79,9 +79,10 @@ kotlin {
                 implementation(compose.animation)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
-//                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-//                implementation(compose.components.uiToolingPreview)
+//                implementation(compose.ui)
+                implementation(compose.components.uiToolingPreview)
+//                implementation(libs.compose.ui.tooling.preview)
             }
         }
 
