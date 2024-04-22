@@ -2,9 +2,13 @@ package dev.dhyto.fpl.presentation.team.teamPicks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +31,8 @@ fun PlayerView(
     playerId: Int,
     gameWeek: Int,
     size: Dp,
+    isCaptain: Boolean = false,
+    isViceCaptain: Boolean = false,
 ) {
     val painterResource = asyncPainterResource(photoUrl)
 
@@ -37,11 +43,33 @@ fun PlayerView(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        KamelImage(
-            modifier = Modifier.size(size),
-            resource = painterResource,
-            contentDescription = playerName
-        )
+
+        BoxWithConstraints(
+            modifier = Modifier.width(size)
+        ) {
+            BadgedBox(
+                badge = {
+                    if (isCaptain || isViceCaptain) {
+                        Badge(
+                            modifier = Modifier.padding(2.dp),
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        ) {
+                            Text(
+                                if (isCaptain) "C" else "V",
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+                }
+            ) {
+                KamelImage(
+                    modifier = Modifier.size(size),
+                    resource = painterResource,
+                    contentDescription = playerName
+                )
+            }
+        }
+
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceVariant)

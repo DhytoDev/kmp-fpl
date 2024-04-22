@@ -54,7 +54,7 @@ fun TeamPickListView(
 
         is UiState.SuccessState<List<ManagerEntry>> -> {
             BoxWithConstraints {
-                val size = 60 * constraints.maxWidth  / 720
+                val size = 60 * 720 / constraints.maxWidth
 
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
@@ -70,14 +70,15 @@ fun TeamPickListView(
 
 
                         PlayerView(
-                            modifier = Modifier.padding(start = 6.dp, end = 2.dp),
+                            modifier = Modifier.padding(top = 4.dp, end = 2.dp),
                             photoUrl = state.data[i].player.photoUrl,
                             playerName = state.data[i].player.displayName,
                             playerId = state.data[i].player.id!!,
                             gameWeek = gameWeek,
-                            size = size.dp
+                            size = size.dp,
+                            isCaptain = state.data[i].isCaptain,
+                            isViceCaptain = state.data[i].isViceCaptain
                         )
-
                     }
                 }
             }
