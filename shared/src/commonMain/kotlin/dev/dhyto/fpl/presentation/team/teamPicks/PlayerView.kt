@@ -1,6 +1,8 @@
 package dev.dhyto.fpl.presentation.team.teamPicks
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -23,9 +25,10 @@ import io.kamel.image.asyncPainterResource
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.koin.koinViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayerView(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     photoUrl: String,
     playerName: String,
     playerId: Int,
@@ -39,13 +42,12 @@ fun PlayerView(
     val playerSummaryViewModel =
         koinViewModel(vmClass = PlayerSummaryViewModel::class, key = playerId.toString())
 
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+    BoxWithConstraints(
+        modifier = Modifier.width(size)
     ) {
-
-        BoxWithConstraints(
-            modifier = Modifier.width(size)
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             BadgedBox(
                 badge = {
@@ -68,24 +70,31 @@ fun PlayerView(
                     contentDescription = playerName
                 )
             }
-        }
 
-        Box(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(horizontal = 8.dp)
-        ) {
-            Text(
-                playerName,
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            Box(
+                modifier = Modifier
+                    .width(size)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .padding(horizontal = 8.dp)
+            ) {
+                Text(
+                    playerName,
+                    modifier = Modifier
+                        .basicMarquee(iterations = Int.MAX_VALUE)
+                        .align(Alignment.Center),
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                )
+            }
+
+            UpcomingOpponentsView(
+                playerId = playerId,
+                eventHandler = playerSummaryViewModel::handleEvent,
+                uiState = playerSummaryViewModel.state.collectAsStateWithLifecycle().value,
+                gameWeek = gameWeek,
+                modifier = Modifier.width(size)
             )
         }
-        UpcomingOpponentsView(
-            playerId = playerId,
-            eventHandler = playerSummaryViewModel::handleEvent,
-            uiState = playerSummaryViewModel.state.collectAsStateWithLifecycle().value,
-            gameWeek = gameWeek,
-        )
     }
 }

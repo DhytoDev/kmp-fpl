@@ -2,6 +2,7 @@ package dev.dhyto.fpl.presentation.team.teamPicks
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -29,7 +30,8 @@ fun UpcomingOpponentsView(
     playerId: Int,
     eventHandler: (event: PlayerSummaryEvent) -> Unit,
     uiState: UiState<Map<Int, List<UpcomingOpponent>>>,
-    gameWeek: Int
+    gameWeek: Int,
+    modifier: Modifier = Modifier
 ) {
     LaunchedEffect(playerId) {
         eventHandler.invoke(PlayerSummaryEvent.GetThreeUpcomingFixtures(playerId, gameWeek))
@@ -45,24 +47,29 @@ fun UpcomingOpponentsView(
             ) {
                 val next = upcomingOpponents.getValue(gameWeek + 1)
 
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    next
-                        .map {
-                            OpponentView(
-                                color = it.difficulty!!.colorByDifficulty(),
-                                textColor = Color.White,
-                                shortName = it.team?.shortName ?: "",
-                                padding = 4.dp
-                            )
-                        }.ifEmpty {
-                            OpponentView(
-                                color = Color.White,
-                                textColor = Color.Black,
-                                padding = 4.dp
-                            )
-                        }
+                BoxWithConstraints(modifier = modifier) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        val weight = if (next.size == 1) 1f else 0.5f
+
+                        next
+                            .map {
+                                OpponentView(
+                                    modifier = Modifier.weight(weight),
+                                    color = it.difficulty!!.colorByDifficulty(),
+                                    textColor = Color.White,
+                                    shortName = it.team?.shortName ?: "",
+                                    lineHeight = 8.sp
+                                )
+                            }.ifEmpty {
+                                OpponentView(
+                                    modifier = Modifier.weight(weight),
+                                    lineHeight = 8.sp
+                                )
+                            }
+                    }
                 }
                 LazyRow {
                     item {
@@ -79,17 +86,19 @@ fun UpcomingOpponentsView(
                                                 color = it.difficulty!!.colorByDifficulty(),
                                                 textColor = Color.White,
                                                 shortName = it.team?.shortName ?: "",
+                                                lineHeight = 2.sp,
+                                                fontSize = 6.sp
                                             )
                                         }.ifEmpty {
                                             OpponentView(
-                                                color = Color.White,
-                                                textColor = Color.Black,
+                                                lineHeight = 2.sp,
+                                                fontSize = 6.sp,
                                             )
                                         }
                                 }
                                 Text(
                                     u.key.toString(),
-                                    fontSize = 8.sp,
+                                    fontSize = 6.sp,
                                     lineHeight = 4.sp
                                 )
                             }
@@ -99,6 +108,7 @@ fun UpcomingOpponentsView(
                 }
             }
         }
+
         else -> {
             LazyRow {
                 items(2) {

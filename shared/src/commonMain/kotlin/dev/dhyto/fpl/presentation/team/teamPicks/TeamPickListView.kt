@@ -54,7 +54,7 @@ fun TeamPickListView(
 
         is UiState.SuccessState<List<ManagerEntry>> -> {
             BoxWithConstraints {
-                val size = 60 * 720 / constraints.maxWidth
+                val size = 65 * 720 / constraints.maxWidth
 
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),
@@ -67,7 +67,6 @@ fun TeamPickListView(
                         ) {
                             Spacer(Modifier.fillMaxWidth())
                         }
-
 
                         PlayerView(
                             modifier = Modifier.padding(top = 4.dp, end = 2.dp),
