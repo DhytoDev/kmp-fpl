@@ -2,12 +2,18 @@ package dev.dhyto.fpl.di
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -27,6 +33,30 @@ fun createHttpClient(httpClientEngine: HttpClientEngine, enableNetworkLogs: Bool
             url("https://fantasy.premierleague.com/api/")
         }
 
+        HttpResponseValidator {
+            validateResponse { response ->
+                if (!response.status.isSuccess()) {
+                    val failureReason = when (response.status) {
+                        HttpStatusCode.Unauthorized -> "Unauthorized"
+                        HttpStatusCode.Forbidden -> "${response.status.value} Missing API key."
+                        HttpStatusCode.NotFound -> "Invalid Request"
+                        HttpStatusCode.RequestTimeout -> "Network Timeout"
+                        in HttpStatusCode.InternalServerError..HttpStatusCode.GatewayTimeout ->
+                            "${response.status.value} Server Error"
+                        else -> "Network error!"
+                    }
+
+
+                    throw HttpExceptions(
+                        response = response,
+                        failureReason = failureReason,
+                        cachedResponseText = response.bodyAsText()
+                    )
+
+                }
+            }
+        }
+
         if (enableNetworkLogs) {
             install(Logging) {
                 logger = Logger.DEFAULT
@@ -41,4 +71,12 @@ fun createHttpClient(httpClientEngine: HttpClientEngine, enableNetworkLogs: Bool
             }
         }
     }
+
+class HttpExceptions(
+    response: HttpResponse,
+    failureReason: String?,
+    cachedResponseText: String,
+) : ResponseException(response, cachedResponseText) {
+    override val message: String = "Status: ${response.status}" + " Failure: $failureReason"
+}
 

@@ -5,7 +5,9 @@ import arrow.core.Option
 import arrow.core.left
 import arrow.core.none
 import arrow.core.some
+import co.touchlab.kermit.Logger
 import com.russhwolf.settings.get
+import com.russhwolf.settings.set
 import dev.dhyto.fpl.FPLDatabase
 import dev.dhyto.fpl.data.local.KeyValuePersistence
 import dev.dhyto.fpl.data.local.mapper.mapToDomain
@@ -25,6 +27,9 @@ import dev.dhyto.fpl.domain.base.Failure
 import dev.dhyto.fpl.domain.base.Failure.NetworkFailure
 import dev.dhyto.fpl.domain.entities.Player
 import dev.dhyto.fpl.domain.entities.Team
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 
 
 interface IFplDataSource {
@@ -132,18 +137,23 @@ class FplDataSource(
         val managerId = fplPrefs.settings.get<Int>(FPLAuthenticationApi.MANAGER_ID_PREFS)
 
         if (cookie == null || managerId == null) {
-            return Failure.UnauthenticatedFailure().left()
+            fplPrefs.settings[FPLAuthenticationApi.USER_COOKIE_PREFS] = "dadafafagg"
+            fplPrefs.settings[FPLAuthenticationApi.MANAGER_ID_PREFS] = 570461
+//            return Failure.UnauthenticatedFailure().left()
         }
 
-        return Either.catch {
-            fplApi.fetchMyTeam(managerId, cookie)
+        return Either.catchOrThrow<ResponseException, EntriesDto> {
+            fplApi.fetchMyTeam(managerId ?: 570461, cookie ?: "")
         }.mapLeft {
-            return NetworkFailure(it.message).left()
+            Logger.e(it.response.bodyAsText())
+            when (it.response.status) {
+                in HttpStatusCode.Unauthorized..HttpStatusCode.Forbidden -> Failure.UnauthenticatedFailure()
+                else -> NetworkFailure(it.message)
+            }
         }
     }
 
     override suspend fun getPlayerDetails(playerId: Int): Either<Failure, PlayerSummaryDto> {
-
         return Either.catch {
             fplApi.fetchPlayerDetails(playerId)
         }.mapLeft {
