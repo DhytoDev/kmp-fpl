@@ -13,16 +13,16 @@ class GetThreeUpcomingFixtures(
 
     suspend fun invoke(playerId: Int, currentGameWeek: Int): Either<Failure, Map<Int, List<UpcomingOpponent>>> {
 
-        val u = mutableMapOf<Int, List<UpcomingOpponent>>()
+        val upcomingOpponentsMap = mutableMapOf<Int, List<UpcomingOpponent>>()
 
         return fplRepository.getPlayerDetails(playerId).map { playerSummary ->
             for (gw in currentGameWeek + 1..currentGameWeek + 3) {
-                u[gw] = playerSummary.upcomingOpponents.filter {
+                upcomingOpponentsMap[gw] = playerSummary.upcomingOpponents.filter {
                     it.gameWeek == gw
                 }
-            }
 
-            return u.right()
+            }
+            return upcomingOpponentsMap.right()
         }
     }
 

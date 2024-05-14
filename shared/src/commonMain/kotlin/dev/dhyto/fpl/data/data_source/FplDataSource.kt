@@ -7,7 +7,6 @@ import arrow.core.none
 import arrow.core.some
 import co.touchlab.kermit.Logger
 import com.russhwolf.settings.get
-import com.russhwolf.settings.set
 import dev.dhyto.fpl.FPLDatabase
 import dev.dhyto.fpl.data.local.KeyValuePersistence
 import dev.dhyto.fpl.data.local.mapper.mapToDomain
@@ -137,13 +136,11 @@ class FplDataSource(
         val managerId = fplPrefs.settings.get<Int>(FPLAuthenticationApi.MANAGER_ID_PREFS)
 
         if (cookie == null || managerId == null) {
-            fplPrefs.settings[FPLAuthenticationApi.USER_COOKIE_PREFS] = "dadafafagg"
-            fplPrefs.settings[FPLAuthenticationApi.MANAGER_ID_PREFS] = 570461
-//            return Failure.UnauthenticatedFailure().left()
+            return Failure.UnauthenticatedFailure().left()
         }
 
         return Either.catchOrThrow<ResponseException, EntriesDto> {
-            fplApi.fetchMyTeam(managerId ?: 570461, cookie ?: "")
+            fplApi.fetchMyTeam(managerId, cookie)
         }.mapLeft {
             Logger.e(it.response.bodyAsText())
             when (it.response.status) {

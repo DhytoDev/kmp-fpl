@@ -54,58 +54,52 @@ fun UpcomingOpponentsView(
                     ) {
                         val weight = if (next.size == 1) 1f else 0.5f
 
-                        next
-                            .map {
-                                OpponentView(
-                                    modifier = Modifier.weight(weight),
-                                    color = it.difficulty!!.colorByDifficulty(),
-                                    textColor = Color.White,
-                                    shortName = it.team?.shortName ?: "",
-                                    lineHeight = 8.sp
-                                )
-                            }.ifEmpty {
-                                OpponentView(
-                                    modifier = Modifier.weight(weight),
-                                    lineHeight = 8.sp
-                                )
-                            }
-                    }
-                }
-                LazyRow {
-                    item {
-                        upcomingOpponents.filter {
-                            it.key == gameWeek + 2 || it.key == gameWeek + 3
-                        }.map { u ->
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Row {
-                                    u.value
-                                        .map {
-                                            OpponentView(
-                                                color = it.difficulty!!.colorByDifficulty(),
-                                                textColor = Color.White,
-                                                shortName = it.team?.shortName ?: "",
-                                                lineHeight = 2.sp,
-                                                fontSize = 6.sp
-                                            )
-                                        }.ifEmpty {
-                                            OpponentView(
-                                                lineHeight = 2.sp,
-                                                fontSize = 6.sp,
-                                            )
-                                        }
-                                }
-                                Text(
-                                    u.key.toString(),
-                                    fontSize = 6.sp,
-                                    lineHeight = 4.sp
-                                )
-                            }
-
+                        next.map {
+                            OpponentView(
+                                modifier = Modifier.weight(weight),
+                                color = it.difficulty!!.colorByDifficulty(),
+                                textColor = Color.White,
+                                shortName = it.team?.shortName ?: "",
+                                lineHeight = 8.sp
+                            )
+                        }.ifEmpty {
+                            OpponentView(
+                                modifier = Modifier.weight(weight),
+                                lineHeight = 8.sp
+                            )
                         }
                     }
                 }
+                upcomingOpponents.filter {
+                    it.key == gameWeek + 2 || it.key == gameWeek + 3
+                }.filter {
+                    it.key <= 38
+                }.map { u ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Row {
+                            u.value.map {
+                                OpponentView(
+                                    color = it.difficulty!!.colorByDifficulty(),
+                                    textColor = Color.White,
+                                    shortName = it.team?.shortName ?: "",
+                                    lineHeight = 2.sp,
+                                    fontSize = 6.sp
+                                )
+                            }.ifEmpty {
+                                OpponentView(
+                                    lineHeight = 2.sp,
+                                    fontSize = 6.sp,
+                                )
+                            }
+                        }
+                        Text(
+                            u.key.toString(), fontSize = 6.sp, lineHeight = 4.sp
+                        )
+                    }
+                }
+
             }
         }
 
@@ -113,11 +107,8 @@ fun UpcomingOpponentsView(
             LazyRow {
                 items(2) {
                     Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(size = 8.dp))
-                            .width(4.dp)
-                            .height(2.dp)
-                            .shimmerEffect()
+                        modifier = Modifier.clip(RoundedCornerShape(size = 8.dp)).width(4.dp)
+                            .height(2.dp).shimmerEffect()
                     )
                 }
             }
