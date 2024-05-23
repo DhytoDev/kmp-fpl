@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.dhyto.fpl.domain.entities.Player
 import dev.dhyto.fpl.presentation.team.teamPicks.TeamPickListView
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
@@ -82,11 +83,16 @@ internal fun MyTeamScreen(
                 when (pos) {
                     0 -> Box {}
                     1 -> {
+                        val selectedPlayerProfile = remember { mutableStateOf<Player?>(null) }
+
                         TeamPickListView(
                             state = myTeamViewModel.state.collectAsStateWithLifecycle().value,
                             eventHandler = myTeamViewModel::handleEvent,
                             navigator = navigator,
                             gameWeek = myTeamViewModel.currentGameWeek.collectAsState().value,
+                            selectedPlayer = selectedPlayerProfile.value,
+                            selectPlayer = { selectedPlayerProfile.value = it },
+                            onBottomSheetClosed = { selectedPlayerProfile.value = null },
                         )
                     }
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.dhyto.fpl.domain.entities.Player
 import dev.dhyto.fpl.presentation.team.PlayerSummaryViewModel
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -36,68 +37,66 @@ fun PlayerView(
     size: Dp,
     isCaptain: Boolean = false,
     isViceCaptain: Boolean = false,
-    onPlayerClick: () -> Unit = {}
+    onPlayerClick: () -> Unit = {},
+    playerToSub: Player? = null,
 ) {
     val painterResource = asyncPainterResource(photoUrl)
 
     val playerSummaryViewModel =
         koinViewModel(vmClass = PlayerSummaryViewModel::class, key = playerId.toString())
 
-    Box(
-        modifier = Modifier.width(size).clickable {
-           onPlayerClick()
-        }
+
+    Column(
+        modifier = modifier.clickable {
+            onPlayerClick()
+        },
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            BadgedBox(
-                badge = {
-                    if (isCaptain || isViceCaptain) {
-                        Badge(
-                            modifier = Modifier.padding(2.dp),
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant
-                        ) {
-                            Text(
-                                if (isCaptain) "C" else "V",
-                                fontSize = 10.sp
-                            )
-                        }
+        BadgedBox(
+            badge = {
+                if (isCaptain || isViceCaptain) {
+                    Badge(
+                        modifier = Modifier.padding(2.dp),
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    ) {
+                        Text(
+                            if (isCaptain) "C" else "V",
+                            fontSize = 10.sp
+                        )
                     }
                 }
-            ) {
-                KamelImage(
-                    modifier = Modifier.size(size),
-                    resource = painterResource,
-                    contentDescription = playerName
-                )
             }
-
-            Box(
-                modifier = Modifier
-                    .width(size)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(horizontal = 8.dp)
-            ) {
-                Text(
-                    playerName,
-                    modifier = Modifier
-                        .basicMarquee(iterations = Int.MAX_VALUE)
-                        .align(Alignment.Center),
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                )
-            }
-
-            UpcomingOpponentsView(
-                playerId = playerId,
-                eventHandler = playerSummaryViewModel::handleEvent,
-                uiState = playerSummaryViewModel.state.collectAsStateWithLifecycle().value,
-                gameWeek = gameWeek,
-                modifier = Modifier.width(size)
+        ) {
+            KamelImage(
+                modifier = Modifier.size(size),
+                resource = painterResource,
+                contentDescription = playerName
             )
         }
+
+        Box(
+            modifier = Modifier
+                .width(size)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(horizontal = 8.dp)
+        ) {
+            Text(
+                playerName,
+                modifier = Modifier
+                    .basicMarquee(iterations = Int.MAX_VALUE)
+                    .align(Alignment.Center),
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+            )
+        }
+
+        UpcomingOpponentsView(
+            playerId = playerId,
+            eventHandler = playerSummaryViewModel::handleEvent,
+            uiState = playerSummaryViewModel.state.collectAsStateWithLifecycle().value,
+            gameWeek = gameWeek,
+            modifier = Modifier.width(size)
+        )
     }
 }

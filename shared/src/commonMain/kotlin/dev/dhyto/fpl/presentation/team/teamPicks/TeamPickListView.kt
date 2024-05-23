@@ -7,13 +7,15 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,19 +32,22 @@ import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TeamPickListView(
     state: UiState<List<ManagerEntry>>,
     eventHandler: (event: MyTeamEvent) -> Unit,
     navigator: Navigator,
     gameWeek: Int,
+    selectedPlayer: Player?,
+    selectPlayer: (player: Player) -> Unit,
+    onBottomSheetClosed: () -> Unit,
 ) {
 
     when (state) {
         UiState.InitialState, UiState.LoadingState -> {
             CircularProgressIndicator()
         }
+
         is UiState.ErrorState -> {
             if (state.failure is Failure.UnauthenticatedFailure) {
                 UnauthenticatedLayout(modifier = Modifier.padding(16.dp), onClick = {
@@ -52,6 +57,7 @@ fun TeamPickListView(
                 })
             }
         }
+
         is UiState.SuccessState<List<ManagerEntry>> -> {
 
             val teamSelectionState = rememberTeamSelectionState(state.data)
@@ -65,14 +71,19 @@ fun TeamPickListView(
                     substitutes = teamSelectionState.substitutes,
                     size = size.dp,
                     gameWeek = gameWeek,
-                    onPlayerClick = teamSelectionState::selectCaptain
+                    selectPlayer = selectPlayer,
+                    selectedPlayer = selectedPlayer,
+                    onSubsClick = {},
+                    selectCaptain = { teamSelectionState.selectCaptain(it); onBottomSheetClosed() },
+                    selectViceCaptain = { teamSelectionState.selectViceCaptain(it); onBottomSheetClosed() },
+                    closeBottomSheet = onBottomSheetClosed
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TeamPicksBody(
     modifier: Modifier = Modifier,
@@ -80,8 +91,14 @@ fun TeamPicksBody(
     substitutes: List<ManagerEntry>,
     size: Dp,
     gameWeek: Int,
-    onPlayerClick: (player: Player) -> Unit
+    selectPlayer: (player: Player) -> Unit,
+    selectedPlayer: Player?,
+    onSubsClick: () -> Unit = {},
+    selectCaptain: (player: Player) -> Unit = {},
+    selectViceCaptain: (player: Player) -> Unit = {},
+    closeBottomSheet: () -> Unit = {}
 ) {
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -99,7 +116,7 @@ fun TeamPicksBody(
                 }
 
                 PlayerView(
-                    modifier = Modifier.padding(top = 4.dp, end = 2.dp),
+                    modifier = Modifier.width(size).padding(top = 4.dp, end = 2.dp),
                     photoUrl = starters[i].player.photoUrl,
                     playerName = starters[i].player.displayName,
                     playerId = starters[i].player.id!!,
@@ -108,7 +125,7 @@ fun TeamPicksBody(
                     isCaptain = starters[i].isCaptain,
                     isViceCaptain = starters[i].isViceCaptain,
                     onPlayerClick = {
-                        onPlayerClick(starters[i].player)
+                        selectPlayer(starters[i].player)
                     }
                 )
             }
@@ -124,7 +141,7 @@ fun TeamPicksBody(
         ) {
             items(substitutes.size) { i ->
                 PlayerView(
-                    modifier = Modifier.padding(top = 4.dp, end = 2.dp),
+                    modifier = Modifier.width(size).padding(top = 4.dp, end = 2.dp),
                     photoUrl = substitutes[i].player.photoUrl,
                     playerName = substitutes[i].player.displayName,
                     playerId = substitutes[i].player.id!!,
@@ -133,21 +150,21 @@ fun TeamPicksBody(
                 )
             }
         }
-    }
-}
 
-@Composable
-fun UnauthenticatedLayout(
-    modifier: Modifier,
-    onClick: () -> Unit
-) {
-    Column(
-        modifier = modifier,
-    ) {
-        Text("Sign In Required")
-        Spacer(Modifier.height(8.dp))
-        Button(onClick = onClick) {
-            Text("Sign In Now")
+        if (selectedPlayer != null) {
+            ModalBottomSheet(
+                modifier = Modifier.fillMaxWidth(),
+                onDismissRequest = { closeBottomSheet() },
+                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            ) {
+                MiniPlayerProfile(
+                    modifier = Modifier.padding(16.dp),
+                    player = selectedPlayer,
+                    onSubsClick = onSubsClick,
+                    onCaptainClick = { selectCaptain(selectedPlayer) },
+                    onViceCaptainClick = { selectViceCaptain(selectedPlayer) }
+                )
+            }
         }
     }
 }
