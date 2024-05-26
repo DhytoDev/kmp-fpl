@@ -3,6 +3,7 @@ package dev.dhyto.fpl.presentation.team.teamPicks
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,10 +13,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,26 +34,56 @@ import moe.tlaster.precompose.koin.koinViewModel
 @Composable
 fun PlayerView(
     modifier: Modifier = Modifier,
-    photoUrl: String,
-    playerName: String,
-    playerId: Int,
+    player: Player,
     gameWeek: Int,
     size: Dp,
     isCaptain: Boolean = false,
     isViceCaptain: Boolean = false,
     onPlayerClick: () -> Unit = {},
     playerToSub: Player? = null,
+    isPotentialSub: Boolean = false,
 ) {
-    val painterResource = asyncPainterResource(photoUrl)
+    val painterResource = asyncPainterResource(player.photoUrl)
+
+    val roundedShape = Shapes().extraSmall
 
     val playerSummaryViewModel =
-        koinViewModel(vmClass = PlayerSummaryViewModel::class, key = playerId.toString())
+        koinViewModel(vmClass = PlayerSummaryViewModel::class, key = player.id.toString())
+
+    val (color, cardModifier) = remember(playerToSub) {
+        when {
+            playerToSub?.id == player.id -> Pair(
+                Color.Green,
+                Modifier
+                    .border(
+                        width = 2.dp,
+                        shape = roundedShape,
+                        color = Color.Green.copy(alpha = 0.5f)
+                    )
+                    .background(Color.White.copy(alpha = 0.2f))
+            )
+
+            isPotentialSub -> Pair(
+                Color.Red,
+                Modifier
+                    .border(
+                        width = 2.dp,
+                        shape = roundedShape,
+                        color = Color.Red.copy(alpha = 0.5f)
+                    )
+                    .background(Color.White.copy(alpha = 0.2f))
+            )
+
+            else -> Pair(
+                Color.Gray,
+                Modifier,
+            )
+        }
+    }
 
 
     Column(
-        modifier = modifier.clickable {
-            onPlayerClick()
-        },
+        modifier = modifier.clickable { onPlayerClick() }.then(cardModifier),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         BadgedBox(
@@ -70,18 +104,18 @@ fun PlayerView(
             KamelImage(
                 modifier = Modifier.size(size),
                 resource = painterResource,
-                contentDescription = playerName
+                contentDescription = player.displayName,
             )
         }
 
         Box(
             modifier = Modifier
                 .width(size)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(color)
                 .padding(horizontal = 8.dp)
         ) {
             Text(
-                playerName,
+                player.name,
                 modifier = Modifier
                     .basicMarquee(iterations = Int.MAX_VALUE)
                     .align(Alignment.Center),
@@ -92,7 +126,7 @@ fun PlayerView(
         }
 
         UpcomingOpponentsView(
-            playerId = playerId,
+            playerId = player.id!!,
             eventHandler = playerSummaryViewModel::handleEvent,
             uiState = playerSummaryViewModel.state.collectAsStateWithLifecycle().value,
             gameWeek = gameWeek,

@@ -132,7 +132,7 @@ fun DreamTeamCardView(
                         .defaultMinSize(minWidth = 20.dp)
                 ) {
                     Text(
-                        player.getPosition(),
+                        player.playerPosition.toString(),
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }

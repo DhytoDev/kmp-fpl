@@ -73,10 +73,18 @@ fun TeamPickListView(
                     gameWeek = gameWeek,
                     selectPlayer = selectPlayer,
                     selectedPlayer = selectedPlayer,
-                    onSubsClick = {},
+                    selectPlayerToSubstitute = {
+                        teamSelectionState.selectedPlayerForSubstitution.value = it
+                        onBottomSheetClosed()
+                    },
                     selectCaptain = { teamSelectionState.selectCaptain(it); onBottomSheetClosed() },
                     selectViceCaptain = { teamSelectionState.selectViceCaptain(it); onBottomSheetClosed() },
-                    closeBottomSheet = onBottomSheetClosed
+                    closeBottomSheet = onBottomSheetClosed,
+                    playerToSub = teamSelectionState.selectedPlayerForSubstitution.value?.player,
+                    cancelSubstitution = {
+                        teamSelectionState.selectedPlayerForSubstitution.value = null
+                    },
+                    makeSubstitution = teamSelectionState::makeSubstitution
                 )
             }
         }
@@ -93,10 +101,13 @@ fun TeamPicksBody(
     gameWeek: Int,
     selectPlayer: (player: Player) -> Unit,
     selectedPlayer: Player?,
-    onSubsClick: () -> Unit = {},
-    selectCaptain: (player: Player) -> Unit = {},
-    selectViceCaptain: (player: Player) -> Unit = {},
-    closeBottomSheet: () -> Unit = {}
+    selectPlayerToSubstitute: (player: ManagerEntry) -> Unit,
+    selectCaptain: (player: Player) -> Unit,
+    selectViceCaptain: (player: Player) -> Unit,
+    closeBottomSheet: () -> Unit,
+    playerToSub: Player?,
+    cancelSubstitution: () -> Unit,
+    makeSubstitution: (player: ManagerEntry) -> Unit
 ) {
 
     Column(
@@ -117,16 +128,24 @@ fun TeamPicksBody(
 
                 PlayerView(
                     modifier = Modifier.width(size).padding(top = 4.dp, end = 2.dp),
-                    photoUrl = starters[i].player.photoUrl,
-                    playerName = starters[i].player.displayName,
-                    playerId = starters[i].player.id!!,
+                    player = starters[i].player,
                     gameWeek = gameWeek,
                     size = size,
                     isCaptain = starters[i].isCaptain,
                     isViceCaptain = starters[i].isViceCaptain,
+                    playerToSub = playerToSub,
+                    isPotentialSub = starters[i].isPotentialSub,
                     onPlayerClick = {
-                        selectPlayer(starters[i].player)
-                    }
+                        when {
+                            playerToSub == null -> selectPlayer(starters[i].player)
+                            playerToSub == starters[i].player -> cancelSubstitution()
+                            starters[i].isPotentialSub -> {
+                                makeSubstitution(starters[i])
+                            }
+
+                            else -> {}
+                        }
+                    },
                 )
             }
         }
@@ -142,11 +161,25 @@ fun TeamPicksBody(
             items(substitutes.size) { i ->
                 PlayerView(
                     modifier = Modifier.width(size).padding(top = 4.dp, end = 2.dp),
-                    photoUrl = substitutes[i].player.photoUrl,
-                    playerName = substitutes[i].player.displayName,
-                    playerId = substitutes[i].player.id!!,
+                    player = substitutes[i].player,
+                    isPotentialSub = substitutes[i].isPotentialSub,
                     gameWeek = gameWeek,
                     size = size,
+                    playerToSub = playerToSub,
+                    onPlayerClick = {
+                        when {
+                            playerToSub == null -> selectPlayer(substitutes[i].player)
+                            playerToSub == substitutes[i].player -> cancelSubstitution()
+                            substitutes[i].isPotentialSub -> {
+                                makeSubstitution(substitutes[i])
+                            }
+
+                            else -> {
+
+                            }
+                        }
+
+                    },
                 )
             }
         }
@@ -160,7 +193,14 @@ fun TeamPicksBody(
                 MiniPlayerProfile(
                     modifier = Modifier.padding(16.dp),
                     player = selectedPlayer,
-                    onSubsClick = onSubsClick,
+                    onSubsClick = {
+                        val playerToSubstitute =
+                            (starters + substitutes).find { it.player.id == selectedPlayer.id }
+
+                        if (playerToSubstitute != null) {
+                            selectPlayerToSubstitute(playerToSubstitute)
+                        }
+                    },
                     onCaptainClick = { selectCaptain(selectedPlayer) },
                     onViceCaptainClick = { selectViceCaptain(selectedPlayer) }
                 )
