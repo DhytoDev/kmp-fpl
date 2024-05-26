@@ -11,6 +11,10 @@ class GetMyTeam(
 ) : KoinComponent {
 
     suspend fun invoke(): Either<Failure, List<ManagerEntry>> {
-        return fplRepository.getMyTeam()
+        return fplRepository.getMyTeam().map {
+            it.map { managerEntry ->
+                managerEntry.copy(isStarter = managerEntry.position <= 11)
+            }
+        }
     }
 }

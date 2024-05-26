@@ -8,6 +8,8 @@ data class ManagerEntry(
     val position: Int = 1,
     val sellingPrice: Double = 0.0,
     val purchasePrice: Double = 0.0,
+    val isPotentialSub: Boolean = false,
+    val isStarter : Boolean = false,
 )
 
 

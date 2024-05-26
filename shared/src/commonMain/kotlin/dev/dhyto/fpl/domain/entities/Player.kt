@@ -20,6 +20,7 @@ data class Player(
 //    val yellowCards: Int = 0,
     val upcomingFixtures: List<Fixture> = emptyList(),
     val playerStats: PlayerStats?,
+    val playerPosition: PlayerPosition?,
 ) {
     companion object {
         const val BASE_PHOTO_URL =
@@ -54,6 +55,7 @@ data class Player(
                             teamBadgeUrl = teamBadgeUrl
                         ),
                         playerStats = null,
+                        playerPosition = PlayerPosition.entries.toTypedArray().random(),
                     )
                 )
             }
@@ -61,14 +63,20 @@ data class Player(
             return list
         }
     }
+}
 
-    fun getPosition(): String {
-        return when (elementType) {
-            1 -> "GKP"
-            2 -> "DEF"
-            3 -> "MID"
-            4 -> "FWD"
-            else -> throw Exception("unknown position")
+enum class PlayerPosition {
+    GKP, DEF, MID, FWD;
+
+    companion object {
+        fun Int.getPlayerPosition(): PlayerPosition {
+            return when (this) {
+                1 -> GKP
+                2 -> DEF
+                3 -> MID
+                4 -> FWD
+                else -> throw IllegalArgumentException("unknown position")
+            }
         }
     }
 }
