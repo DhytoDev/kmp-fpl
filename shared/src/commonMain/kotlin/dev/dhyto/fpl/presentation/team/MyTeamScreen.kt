@@ -92,7 +92,7 @@ internal fun MyTeamScreen(
                             gameWeek = myTeamViewModel.currentGameWeek.collectAsState().value,
                             selectedPlayer = selectedPlayerProfile.value,
                             selectPlayer = { selectedPlayerProfile.value = it },
-                            onBottomSheetClosed = { selectedPlayerProfile.value = null },
+                            closeBottomSheet = { selectedPlayerProfile.value = null },
                         )
                     }
 

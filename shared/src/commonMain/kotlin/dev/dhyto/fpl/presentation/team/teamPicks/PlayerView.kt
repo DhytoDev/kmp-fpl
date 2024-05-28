@@ -42,6 +42,7 @@ fun PlayerView(
     onPlayerClick: () -> Unit = {},
     playerToSub: Player? = null,
     isPotentialSub: Boolean = false,
+    position: Int = 0
 ) {
     val painterResource = asyncPainterResource(player.photoUrl)
 
@@ -115,7 +116,7 @@ fun PlayerView(
                 .padding(horizontal = 8.dp)
         ) {
             Text(
-                player.name,
+                player.name + ": $position",
                 modifier = Modifier
                     .basicMarquee(iterations = Int.MAX_VALUE)
                     .align(Alignment.Center),
