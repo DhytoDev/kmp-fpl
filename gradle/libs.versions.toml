@@ -1,5 +1,5 @@
 [versions]
-agp = "8.1.4"
+agp = "8.3.0"
 android-minSdk = "24"
 android-compileSdk = "34"
 android-targetSdk = "34"
@@ -13,23 +13,22 @@ androidx-espresso-core = "3.5.1"
 androidx-lifecycle = "2.6.2"
 arrow = "1.2.0"
 compose = "1.6.2"
-compose-material3 = "1.1.2"
-compose-compiler = "1.5.4"
 compose-bom = "2024.01.00"
+compose-compiler="1.5.11"
+compose-material3 = "1.1.2"
 coroutines = "1.8.0"
 jetbrainsCompose = "1.6.10"
-jetbrainsKotlinAndroid = "1.9.0"
+jetbrainsKotlinAndroid = "2.0.0"
 junit = "4.13.2"
 junitJupiter = "5.8.1"
-kamelImage = "0.9.0"
+kamelImage = "1.0.0-beta.6"
 kermit = "2.0.2"
 kotlinxSerialization = "1.6.2"
 kotlinxDateTime = "0.5.0"
 kotlin = "2.0.0"
 koin = "3.5.1"
-koinCompose = "3.5.1"
-ktor = "2.3.5"
-ksp = "1.9.21-1.0.15"
+ktor = "3.0.0-wasm2"
+ksp = "2.0.0-1.0.21"
 lifecycle-runtime-ktx = "2.6.2"
 mockative = "2.0.1"
 multiplatformSettings = "1.1.1"
@@ -43,10 +42,11 @@ arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref 
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
-kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
+kamel-image = { module = "media.kamel:kamel-image-default", version.ref = "kamelImage" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }
 logging-kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+logging-kermit-simple = { module = "co.touchlab:kermit-simple", version.ref = "kermit" }
 
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -79,6 +79,7 @@ ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serializati
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
 ktor-client-java = { group = "io.ktor", name = "ktor-client-java", version.ref = "ktor" }
+ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 ktor-client-ios = { group = "io.ktor", name = "ktor-client-ios", version.ref = "ktor" }
 ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }

@@ -1,5 +1,4 @@
 plugins {
-//    alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlin.serialization)
@@ -10,13 +9,13 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
-        }
-    }
+    applyDefaultHierarchyTemplate()
+
+    androidTarget()
+
+    jvmToolchain(17)
+
+    jvm()
 
     listOf(
         iosX64(),
@@ -24,18 +23,12 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Shared"
+            baseName = "shared"
             isStatic = true
-
-            compilation.apply {
-                kotlinOptions.freeCompilerArgs += arrayOf("-linker-options", "-lsqlite3")
-            }
+            linkerOpts("-lsqlite3")
+            export(libs.logging.kermit.simple)
         }
     }
-
-    jvm()
-
-    jvmToolchain(17)
 
     sourceSets {
         all {
@@ -45,11 +38,9 @@ kotlin {
                 optIn("org.jetbrains.compose.resources.ExperimentalResourceApi")
                 optIn("org.jetbrains.compose.resources.InternalResourceApi")
             }
-
         }
 
         val commonMain by getting {
-
             dependencies {
                 // put your Multiplatform dependencies here
                 implementation(project.dependencies.platform(libs.koin.bom))
@@ -64,14 +55,13 @@ kotlin {
                 implementation(libs.kotlinx.datetime)
 
                 api(libs.koin.core)
-                api(libs.koin.core.coroutines)
                 api(libs.koin.compose)
                 api(libs.bundles.precompose)
 
                 implementation(libs.bundles.ktor.common)
 
                 implementation(libs.ktor.client.mock)
-                implementation(libs.logging.kermit)
+                api(libs.logging.kermit)
 
                 implementation(libs.multiplatform.settings)
 
@@ -83,13 +73,11 @@ kotlin {
                 implementation(compose.components.resources)
 //                implementation(compose.ui)
                 implementation(compose.components.uiToolingPreview)
-//                implementation(libs.compose.ui.tooling.preview)
             }
         }
 
         val androidMain by getting {
             dependencies {
-//                dependsOn(commonMain)
                 implementation(libs.ktor.client.android)
                 implementation(libs.compose.ui)
                 implementation(libs.compose.ui.tooling.preview)
@@ -97,19 +85,13 @@ kotlin {
             }
         }
 
-
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
+        iosMain {
             dependencies {
-                implementation(libs.ktor.client.ios)
+                implementation(libs.ktor.client.darwin)
                 implementation(libs.sqlDelight.native.driver)
+                api(libs.logging.kermit.simple)
             }
+            dependsOn(commonMain)
         }
 
         val jvmMain by getting {
@@ -146,15 +128,15 @@ kotlin {
             }
         }
 
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosX64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
-        }
+//        val iosX64Test by getting
+//        val iosArm64Test by getting
+//        val iosSimulatorArm64Test by getting
+//        val iosTest by creating {
+//            dependsOn(commonTest)
+//            iosX64Test.dependsOn(this)
+//            iosArm64Test.dependsOn(this)
+//            iosSimulatorArm64Test.dependsOn(this)
+//        }
     }
 }
 
