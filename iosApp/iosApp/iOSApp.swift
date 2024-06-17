@@ -1,10 +1,10 @@
 import SwiftUI
-import Shared
+import shared
 
 @main
 struct iOSApp: App {
     init() {
-        InjectionKt.configureDi()
+        InjectionKt.doInitKoin()
     }
 
 	var body: some Scene {
