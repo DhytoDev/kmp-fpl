@@ -1,7 +1,7 @@
 package dev.dhyto.fpl.data.remote
 
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.UserAgent
 import io.ktor.client.plugins.logging.DEFAULT
@@ -23,7 +23,31 @@ import io.ktor.http.renderSetCookieHeader
 import io.ktor.http.setCookie
 import org.koin.core.component.KoinComponent
 
-class FPLAuthenticationApi : KoinComponent {
+class FPLAuthenticationApi(private val httpClientEngine: HttpClientEngine) : KoinComponent {
+
+    private val client: HttpClient = HttpClient(httpClientEngine).config {
+       install(DefaultRequest) {
+           contentType(ContentType.Application.FormUrlEncoded)
+       }
+
+       install(UserAgent) {
+           agent =
+               "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+       }
+
+       install(Logging) {
+           logger = Logger.DEFAULT
+           level = LogLevel.ALL
+           logger = object : Logger {
+               override fun log(message: String) {
+                   co.touchlab.kermit.Logger.d(tag = "KtorClient", null) {
+                       message
+                   }
+               }
+           }
+       }
+       followRedirects = false
+   }
 
     suspend fun authenticate(login: String, password: String): String {
         val loginUrl = "https://users.premierleague.com/accounts/login/"
@@ -79,30 +103,6 @@ class FPLAuthenticationApi : KoinComponent {
     companion object {
         const val USER_COOKIE_PREFS = "user_cookie_fpl"
         const val MANAGER_ID_PREFS = "manager_id"
-
-        private val client = HttpClient(CIO).config {
-            install(DefaultRequest) {
-                contentType(ContentType.Application.FormUrlEncoded)
-            }
-
-            install(UserAgent) {
-                agent =
-                    "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-            }
-
-            install(Logging) {
-                logger = Logger.DEFAULT
-                level = LogLevel.ALL
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        co.touchlab.kermit.Logger.d(tag = "KtorClient", null) {
-                            message
-                        }
-                    }
-                }
-            }
-            followRedirects = false
-        }
     }
 }
 

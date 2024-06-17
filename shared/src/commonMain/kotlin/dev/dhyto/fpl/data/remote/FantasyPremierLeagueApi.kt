@@ -12,7 +12,11 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import org.koin.core.component.KoinComponent
 
 class FantasyPremierLeagueApi(
@@ -39,6 +43,16 @@ class FantasyPremierLeagueApi(
     suspend fun fetchMyTeam(managerId: Int, cookie: String) =
         client.get {
             url("my-team/$managerId")
+            headers {
+                append("Cookie", cookie)
+            }
+        }.body<EntriesDto>()
+
+    suspend fun saveTeamPicks(managerId: Int, cookie: String, teamPicks: EntriesDto) =
+        client.post {
+            url("my-team/$managerId")
+            contentType(ContentType.Application.Json)
+            setBody(teamPicks)
             headers {
                 append("Cookie", cookie)
             }

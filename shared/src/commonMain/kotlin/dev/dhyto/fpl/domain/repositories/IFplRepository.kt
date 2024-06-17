@@ -25,4 +25,6 @@ interface IFplRepository {
     suspend fun getMyTeam(): Either<Failure, List<ManagerEntry>>
 
     suspend fun getPlayerDetails(playerId: Int) : Either<Failure, PlayerSummary>
+
+    suspend fun saveMyTeamPicks(teamPicks: List<ManagerEntry>) : Either<Failure, List<ManagerEntry>>
 }

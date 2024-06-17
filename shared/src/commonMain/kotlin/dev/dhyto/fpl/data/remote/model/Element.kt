@@ -43,7 +43,7 @@ data class Element(
     @SerialName("element_type")
     val elementType: Int,
     @SerialName("ep_next")
-    val epNext: String,
+    val epNext: String?,
     @SerialName("ep_this")
     val epThis: String,
     @SerialName("event_points")

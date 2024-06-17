@@ -1,10 +1,14 @@
 package dev.dhyto.fpl.data.repositories
 
 import arrow.core.Either
+import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.right
 import arrow.fx.coroutines.parZip
 import dev.dhyto.fpl.data.data_source.IFplDataSource
+import dev.dhyto.fpl.data.remote.model.EntriesDto
+import dev.dhyto.fpl.data.repositories.TeamPicksMapper.toManagerEntry
+import dev.dhyto.fpl.data.repositories.TeamPicksMapper.toPickDto
 import dev.dhyto.fpl.domain.base.Failure
 import dev.dhyto.fpl.domain.entities.Fixture
 import dev.dhyto.fpl.domain.entities.ManagerEntry
@@ -99,18 +103,19 @@ class FplRepository(
                 entriesDto.picks!!.map { pickDto ->
                     val player = players.first { it.id == pickDto?.element }
 
-                    ManagerEntry(
-                        player = player,
-                        isCaptain = pickDto?.isCaptain ?: false,
-                        isViceCaptain = pickDto?.isViceCaptain ?: false,
-                        multiplier = pickDto?.multiplier ?: 1,
-                        position = pickDto?.position ?: 1,
-                        sellingPrice = pickDto?.sellingPrice?.div(10)?.toDouble() ?: 0.0,
-                        purchasePrice = pickDto?.purchasePrice?.div(10)?.toDouble() ?: 0.0,
-                    )
+                    pickDto.toManagerEntry(player)
                 }
             }
         }
+    }
+
+    override suspend fun saveMyTeamPicks(teamPicks: List<ManagerEntry>): Either<Failure, List<ManagerEntry>> {
+
+        val picks = teamPicks.map { it.toPickDto() }
+
+        val entries = EntriesDto(null, null, null, picks)
+
+        return fplDataSource.saveTeamPicks(entries).flatMap { getMyTeam() }
     }
 
     override suspend fun getPlayerDetails(playerId: Int): Either<Failure, PlayerSummary> {

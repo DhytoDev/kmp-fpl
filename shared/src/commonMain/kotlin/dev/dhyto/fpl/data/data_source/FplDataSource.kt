@@ -51,6 +51,7 @@ interface IFplDataSource {
     suspend fun findTeamById(teamId: Int): Option<Team>
 
     suspend fun getMyTeam(): Either<Failure, EntriesDto>
+    suspend fun saveTeamPicks(entries: EntriesDto): Either<Failure, EntriesDto>
 
     suspend fun getPlayerDetails(playerId: Int): Either<Failure, PlayerSummaryDto>
 }
@@ -141,6 +142,25 @@ class FplDataSource(
 
         return Either.catchOrThrow<ResponseException, EntriesDto> {
             fplApi.fetchMyTeam(managerId, cookie)
+        }.mapLeft {
+            Logger.e(it.response.bodyAsText())
+            when (it.response.status) {
+                in HttpStatusCode.Unauthorized..HttpStatusCode.Forbidden -> Failure.UnauthenticatedFailure()
+                else -> NetworkFailure(it.message)
+            }
+        }
+    }
+
+    override suspend fun saveTeamPicks(entries: EntriesDto): Either<Failure, EntriesDto> {
+        val cookie = fplPrefs.settings.get<String>(FPLAuthenticationApi.USER_COOKIE_PREFS)
+        val managerId = fplPrefs.settings.get<Int>(FPLAuthenticationApi.MANAGER_ID_PREFS)
+
+        if (cookie == null || managerId == null) {
+            return Failure.UnauthenticatedFailure().left()
+        }
+
+        return Either.catchOrThrow<ResponseException, EntriesDto> {
+            fplApi.saveTeamPicks(managerId, cookie, entries)
         }.mapLeft {
             Logger.e(it.response.bodyAsText())
             when (it.response.status) {

@@ -1,5 +1,11 @@
 package dev.dhyto.fpl.di
 
-import dev.dhyto.fpl.di.initKoin
+import org.koin.core.context.startKoin
 
-fun configureDi() = initKoin()
+fun initKoin() = startKoin {
+    modules(
+        sharedModule(createHttpClientEngine(), enableNetworkLogs = true),
+        platformModule(),
+        cacheModule(),
+    )
+}

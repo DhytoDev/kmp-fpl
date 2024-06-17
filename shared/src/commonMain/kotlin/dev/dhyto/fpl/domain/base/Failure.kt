@@ -11,6 +11,8 @@ sealed class Failure(open val message: String?) {
         override val message: String =
             FailureConst.UNAUTHENTICATED_FAILURE,
     ) : Failure(message)
+    override
+    fun toString() : String = this.message ?: "Something bad happen"
 }
 
 object FailureConst {

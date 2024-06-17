@@ -9,7 +9,21 @@ data class ManagerEntry(
     val sellingPrice: Double = 0.0,
     val purchasePrice: Double = 0.0,
     val isPotentialSub: Boolean = false,
-    val isStarter : Boolean = false,
+    val isStarter: Boolean = false,
 )
 
+enum class Chip {
+    BB, WC, TC, FH;
+
+    companion object {
+        fun Chip.toNameString(): String {
+            return when (this) {
+                BB -> "Bench Boost"
+                WC -> "Wild Card"
+                TC -> "Triple Captain"
+                FH -> "Free Hit"
+            }
+        }
+    }
+}
 
