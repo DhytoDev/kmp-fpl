@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -30,13 +30,12 @@ import dev.dhyto.fpl.utils.kickOffDayString
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
-@Composable
-fun FixturesSection(
-    modifier: Modifier,
-    showLoading: Boolean = true,
-    fixtures: List<Fixture>,
+fun LazyListScope.FixturesSection(
+    itemModifier: Modifier,
+    showLoading: Boolean,
+    fixtures: List<Fixture>
 ) {
-    Column {
+    item {
         Box(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -50,30 +49,28 @@ fun FixturesSection(
                 Text("See All", style = MaterialTheme.typography.bodySmall)
             }
         }
-        LazyColumn(modifier) {
-            if (showLoading) {
-                items(5) {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .shimmerEffect()
-                            .fillMaxWidth()
-                            .height(30.dp)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-            }
+    }
 
-            itemsIndexed(fixtures.take(5)) { _, fixture ->
-                FixtureItem(
-                    fixture = fixture,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-            }
+    if (showLoading) {
+        items(5) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .shimmerEffect()
+                    .fillMaxWidth()
+                    .height(30.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 
+    itemsIndexed(fixtures) { _, fixture ->
+        FixtureItem(
+            fixture = fixture,
+            modifier = itemModifier
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+    }
 }
 
 @Composable
@@ -106,11 +103,11 @@ private fun FixtureItem(
                 )
                 Spacer(modifier = Modifier.weight(1.0F))
                 KamelImage(
-                    modifier = Modifier.size(35.dp),
-                    resource = homeBadgeResource,
+                    { homeBadgeResource },
                     contentDescription = fixture.teamHome.name,
+                    modifier = Modifier.size(35.dp),
                     contentScale = ContentScale.Fit,
-                    contentAlignment = Alignment.TopStart,
+                    contentAlignment = Alignment.TopStart
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 if (fixture.teamHScore != null)
@@ -142,11 +139,11 @@ private fun FixtureItem(
                     Text(fixture.teamAScore.toString(), fontSize = 12.sp)
                 Spacer(modifier = Modifier.width(4.dp))
                 KamelImage(
-                    modifier = Modifier.size(35.dp),
-                    resource = awayBadgeResource,
+                    { awayBadgeResource },
                     contentDescription = fixture.teamHome.name,
+                    modifier = Modifier.size(35.dp),
                     contentScale = ContentScale.Fit,
-                    contentAlignment = Alignment.TopStart,
+                    contentAlignment = Alignment.TopStart
                 )
                 Spacer(modifier = Modifier.weight(1.0F))
                 Text(

@@ -1,10 +1,12 @@
 package dev.dhyto.fpl.presentation.root
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import dev.dhyto.fpl.presentation.navigation.Navigation
 import dev.dhyto.fpl.presentation.navigation.NavigationRoute
 import dev.dhyto.fpl.presentation.navigation.currentRoute
@@ -24,7 +26,10 @@ internal fun RootScreen(navigator: Navigator) {
                 -> BottomNavigationBar(navigator)
             }
         }) {
-        Navigation(navigator)
+        Navigation(
+            modifier = Modifier.padding(it),
+            navigator = navigator
+        )
     }
 }
 

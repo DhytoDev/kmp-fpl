@@ -54,25 +54,19 @@ fun PlayerView(
     val (color, cardModifier) = remember(playerToSub) {
         when {
             playerToSub?.id == player.id -> Pair(
-                Color.Green,
-                Modifier
-                    .border(
-                        width = 2.dp,
-                        shape = roundedShape,
-                        color = Color.Green.copy(alpha = 0.5f)
-                    )
-                    .background(Color.White.copy(alpha = 0.2f))
+                Color.Green, Modifier.border(
+                    width = 2.dp,
+                    shape = roundedShape,
+                    color = Color.Green.copy(alpha = 0.5f)
+                ).background(Color.White.copy(alpha = 0.2f))
             )
 
             isPotentialSub -> Pair(
-                Color.Red,
-                Modifier
-                    .border(
-                        width = 2.dp,
-                        shape = roundedShape,
-                        color = Color.Red.copy(alpha = 0.5f)
-                    )
-                    .background(Color.White.copy(alpha = 0.2f))
+                Color.Red, Modifier.border(
+                    width = 2.dp,
+                    shape = roundedShape,
+                    color = Color.Red.copy(alpha = 0.5f)
+                ).background(Color.White.copy(alpha = 0.2f))
             )
 
             else -> Pair(
@@ -95,30 +89,25 @@ fun PlayerView(
                         containerColor = MaterialTheme.colorScheme.surfaceVariant
                     ) {
                         Text(
-                            if (isCaptain) "C" else "V",
-                            fontSize = 10.sp
+                            if (isCaptain) "C" else "V", fontSize = 10.sp
                         )
                     }
                 }
             }
         ) {
             KamelImage(
-                modifier = Modifier.size(size),
-                resource = painterResource,
+                { painterResource },
                 contentDescription = player.displayName,
+                modifier = Modifier.size(size)
             )
         }
 
         Box(
-            modifier = Modifier
-                .width(size)
-                .background(color)
-                .padding(horizontal = 8.dp)
+            modifier = Modifier.width(size).background(color).padding(horizontal = 8.dp)
         ) {
             Text(
                 player.name + ": $position",
-                modifier = Modifier
-                    .basicMarquee(iterations = Int.MAX_VALUE)
+                modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE)
                     .align(Alignment.Center),
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,

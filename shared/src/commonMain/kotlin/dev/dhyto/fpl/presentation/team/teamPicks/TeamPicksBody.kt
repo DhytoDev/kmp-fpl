@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -38,12 +42,21 @@ fun TeamPicksBody(
     closeBottomSheet: () -> Unit,
     playerToSub: Player?,
     cancelSubstitution: () -> Unit,
-    makeSubstitution: (player: ManagerEntry) -> Unit
+    makeSubstitution: (player: ManagerEntry) -> Unit,
+    onSaveClick: (teamPicks: List<ManagerEntry>) -> Unit
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        IconButton(onClick = {
+            onSaveClick(starters + substitutes)
+        }){
+            Icon(
+                imageVector = Icons.Filled.Save,
+                contentDescription = "Save"
+            )
+        }
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             maxItemsInEachRow = 5,

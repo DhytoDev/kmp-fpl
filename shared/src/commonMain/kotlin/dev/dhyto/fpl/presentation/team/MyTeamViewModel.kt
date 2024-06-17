@@ -2,7 +2,7 @@ package dev.dhyto.fpl.presentation.team
 
 import dev.dhyto.fpl.domain.entities.ManagerEntry
 import dev.dhyto.fpl.domain.repositories.IFplRepository
-import dev.dhyto.fpl.domain.usecases.GetMyTeam
+import dev.dhyto.fpl.domain.usecases.SaveOrGetMyTeam
 import dev.dhyto.fpl.presentation.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,7 +13,7 @@ import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
 class MyTeamViewModel(
-    private val getMyTeam: GetMyTeam,
+    private val saveOrGetMyTeam: SaveOrGetMyTeam,
     private val fplRepository: IFplRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow<UiState<List<ManagerEntry>>>(UiState.InitialState)
@@ -38,7 +38,22 @@ class MyTeamViewModel(
                 viewModelScope.launch {
                     _state.emit(UiState.LoadingState)
 
-                    getMyTeam.invoke().fold(
+                    saveOrGetMyTeam.invoke().fold(
+                        ifLeft = {
+                            _state.emit(UiState.ErrorState(it))
+                        },
+                        ifRight = {
+                            _state.emit(UiState.SuccessState(it))
+                        }
+                    )
+                }
+            }
+
+            is MyTeamEvent.SaveMyTeam -> {
+                viewModelScope.launch {
+                    _state.emit(UiState.LoadingState)
+
+                    saveOrGetMyTeam.invoke(event.teamPicks).fold(
                         ifLeft = {
                             _state.emit(UiState.ErrorState(it))
                         },
@@ -54,4 +69,6 @@ class MyTeamViewModel(
 
 sealed interface MyTeamEvent {
     data object GetMyTeam : MyTeamEvent
+
+    data class SaveMyTeam(val teamPicks: List<ManagerEntry>) : MyTeamEvent
 }

@@ -100,7 +100,7 @@ internal fun SignInForm(
             password = password,
             enabled = enabled,
             onPasswordChanged = onPasswordChanged,
-            onDoneClicked = {}
+            onDoneClicked = onSubmit
         )
         Spacer(modifier = Modifier.height(12.dp))
         SignInButton(

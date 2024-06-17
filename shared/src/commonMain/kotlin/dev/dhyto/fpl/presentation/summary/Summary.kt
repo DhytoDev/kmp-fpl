@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
@@ -16,22 +18,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.dhyto.fpl.domain.entities.ManagerInfo
 
-@Composable
-internal fun SummaryCard(
+fun LazyListScope.SummaryCard(
     modifier: Modifier,
     managerInfo: ManagerInfo,
 ) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
-    ) {
-        SummaryContent(
-            modifier = Modifier.padding(16.dp),
-            managerInfo = managerInfo
-        )
+    item {
+        Card(
+            modifier = modifier,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+        ) {
+            SummaryContent(
+                modifier = Modifier.padding(16.dp),
+                managerInfo = managerInfo
+            )
+        }
     }
 }
 
@@ -47,6 +50,7 @@ internal fun SummaryContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         LazyVerticalGrid(
+            modifier = Modifier.heightIn(max = 200.dp),
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly

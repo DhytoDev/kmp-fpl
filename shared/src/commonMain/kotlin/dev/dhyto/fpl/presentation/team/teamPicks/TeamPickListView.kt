@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -42,6 +43,8 @@ fun TeamPickListView(
                     )
                 })
             }
+
+            Text(text = state.failure.toString())
         }
 
         is UiState.SuccessState<List<ManagerEntry>> -> {
@@ -70,7 +73,8 @@ fun TeamPickListView(
                     cancelSubstitution = {
                         teamSelectionState.selectedPlayerForSubstitution.value = null
                     },
-                    makeSubstitution = teamSelectionState::makeSubstitution
+                    makeSubstitution = teamSelectionState::makeSubstitution,
+                    onSaveClick = { eventHandler(MyTeamEvent.SaveMyTeam(it)) }
                 )
             }
         }

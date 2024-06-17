@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,13 +29,12 @@ import dev.dhyto.fpl.domain.entities.Player
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
-@Composable
-fun DreamTeamSection(
+fun LazyListScope.DreamTeamSection(
     modifier: Modifier,
     showLoading: Boolean = true,
     players: List<Player>,
 ) {
-    Column {
+    item {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,6 +47,8 @@ fun DreamTeamSection(
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
+    }
+    item {
         LazyRow(modifier) {
             itemsIndexed(players) { _, player ->
                 DreamTeamCardView(
@@ -93,20 +95,20 @@ fun DreamTeamCardView(
             ) {
                 Row {
                     KamelImage(
+                        { painterBadgeResource },
+                        contentDescription = player.team.name,
                         modifier = Modifier.height(50.dp).width(50.dp)
                             .padding(start = 8.dp, top = 4.dp),
-                        resource = painterBadgeResource,
-                        contentDescription = player.team.name,
                         contentScale = ContentScale.Fit,
-                        contentAlignment = Alignment.TopStart,
+                        contentAlignment = Alignment.TopStart
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     KamelImage(
-                        modifier = Modifier.height(100.dp).width(100.dp),
-                        resource = painterPlayerResource,
+                        { painterPlayerResource },
                         contentDescription = player.name,
+                        modifier = Modifier.height(100.dp).width(100.dp),
                         contentScale = ContentScale.Fit,
-                        contentAlignment = Alignment.BottomEnd,
+                        contentAlignment = Alignment.BottomEnd
                     )
                 }
             }
