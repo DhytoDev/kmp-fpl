@@ -14,7 +14,7 @@ import dev.dhyto.fpl.data.local.mapper.mapToDomainTeam
 import dev.dhyto.fpl.data.remote.FPLAuthenticationApi
 import dev.dhyto.fpl.data.remote.FantasyPremierLeagueApi
 import dev.dhyto.fpl.data.remote.model.DreamTeamSquadDto
-import dev.dhyto.fpl.data.remote.model.Element
+import dev.dhyto.fpl.data.remote.model.ElementDto
 import dev.dhyto.fpl.data.remote.model.EntriesDto
 import dev.dhyto.fpl.data.remote.model.EventStatusDto
 import dev.dhyto.fpl.data.remote.model.FixtureDto
@@ -42,7 +42,7 @@ interface IFplDataSource {
 
     suspend fun fetchDreamTeam(gameWeek: Int): Either<Failure, DreamTeamSquadDto>
 
-    fun insertPlayer(element: Element)
+    fun insertPlayer(element: ElementDto)
 
     fun insertTeam(teamDto: TeamDto)
 
@@ -86,22 +86,22 @@ class FplDataSource(
             .mapLeft { NetworkFailure(it.message) }
     }
 
-    override fun insertPlayer(element: Element) {
+    override fun insertPlayer(element: ElementDto) {
         fplDb.playerQueries.insertPlayer(
-            id = element.id.toLong(),
+            id = element.id?.toLong(),
             fullName = "${element.firstName} ${element.secondName}",
-            displayName = element.webName,
-            totalPoints = element.totalPoints.toLong(),
-            price = (element.nowCost / 10).toDouble(),
-            goalsScored = element.goalsScored.toLong(),
-            assists = element.assists.toLong(),
-            elementType = element.elementType.toLong(),
-            code = element.code.toLong(),
-            cleanSheets = element.cleanSheets.toLong(),
-            saves = element.saves.toLong(),
-            yellowCards = element.yellowCards.toLong(),
-            redCards = element.redCards.toLong(),
-            team = element.team.toLong(),
+            displayName = element.webName ?: element.firstName!!,
+            totalPoints = element.totalPoints?.toLong() ?: 0,
+            price = ((element.nowCost ?: 0) / 10).toDouble(),
+            goalsScored = element.goalsScored?.toLong() ?: 0,
+            assists = element.assists?.toLong() ?: 0,
+            elementType = element.elementType?.toLong() ?: 0,
+            code = element.code?.toLong() ?: 0,
+            cleanSheets = element.cleanSheets?.toLong() ?: 0,
+            saves = element.saves?.toLong()  ?: 0,
+            yellowCards = element.yellowCards?.toLong() ?: 0,
+            redCards = element.redCards?.toLong() ?: 0,
+            team = element.team?.toLong() ?: 0,
         )
     }
 

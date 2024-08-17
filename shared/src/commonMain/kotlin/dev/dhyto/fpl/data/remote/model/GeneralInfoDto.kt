@@ -10,7 +10,7 @@ data class GeneralInfoDto(
     val elementStats: List<ElementStat>,
     @SerialName("element_types")
     val elementTypes: List<ElementType>,
-    val elements: List<Element>,
+    val elements: List<ElementDto>,
     val events: List<Event>,
     @SerialName("game_settings")
     val gameSettings: GameSettings,
