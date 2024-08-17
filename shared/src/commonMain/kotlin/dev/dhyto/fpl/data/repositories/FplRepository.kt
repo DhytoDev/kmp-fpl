@@ -77,8 +77,12 @@ class FplRepository(
         }
     }
 
-    override suspend fun currentGameWeek(): Int =
-        fplDataSource.fetchEventStatus().getOrNull()?.status?.first()?.event ?: 1
+    override suspend fun currentGameWeek(): Int {
+        return fplDataSource.fetchEventStatus().map {
+            if (it.status.isEmpty()) return@map 1 else fplDataSource.fetchEventStatus().getOrNull()?.status?.first()?.event ?: 1
+        }.getOrElse { 1 }
+
+    }
 
     override suspend fun findTeamById(teamId: Int): Team =
         fplDataSource.findTeamById(teamId).getOrElse { Team(id = teamId) }
