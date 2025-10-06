@@ -1,5 +1,11 @@
 This is a Kotlin Multiplatform project targeting Android, iOS, Desktop.
 
+Engineering Guidelines
+
+For coding conventions and the project structure used in this repository, see the Engineering Guidelines.
+
+- View the Engineering Guidelines: [Engineering Guidelines](./.junie/guidelines.md)
+
 - /shared is for the code that will be shared between all targets in the project. The most important
   subfolder is commonMain. If preferred, you can add code to the platform-specific folders here too.
 - /androidApp This is a Kotlin module that builds into an Android application. It uses Gradle as the
