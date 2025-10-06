@@ -1,19 +1,22 @@
+@file:OptIn(ExperimentalTime::class)
+
 package dev.dhyto.fpl.utils
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
-import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
+import kotlin.time.Clock.System
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 fun String.convertToLocalDateTime(): LocalDateTime {
-    return this.toInstant().toLocalDateTime(TimeZone.currentSystemDefault())
+    return Instant.parse(this).toLocalDateTime(TimeZone.currentSystemDefault())
 }
 
 fun String.kickOffDayString(): String {
-    val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+    val today = System.todayIn(TimeZone.currentSystemDefault())
 
     val kickOffDate = this.convertToLocalDateTime().date
 

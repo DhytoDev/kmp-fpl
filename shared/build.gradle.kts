@@ -13,7 +13,7 @@ kotlin {
 
     androidTarget()
 
-    jvmToolchain(17)
+    jvmToolchain(21)
 
     jvm()
 
@@ -60,7 +60,6 @@ kotlin {
 
                 implementation(libs.bundles.ktor.common)
 
-                implementation(libs.ktor.client.mock)
                 api(libs.logging.kermit)
 
                 implementation(libs.multiplatform.settings)
@@ -79,8 +78,6 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(libs.ktor.client.android)
-                implementation(libs.compose.ui)
-                implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.sqlDelight.android.driver)
             }
         }
@@ -123,20 +120,10 @@ kotlin {
         val androidUnitTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
+                implementation(libs.junit)
                 implementation(libs.sqlDelight.jvm.driver)
             }
         }
-
-//        val iosX64Test by getting
-//        val iosArm64Test by getting
-//        val iosSimulatorArm64Test by getting
-//        val iosTest by creating {
-//            dependsOn(commonTest)
-//            iosX64Test.dependsOn(this)
-//            iosArm64Test.dependsOn(this)
-//            iosSimulatorArm64Test.dependsOn(this)
-//        }
     }
 }
 
@@ -152,6 +139,9 @@ sqldelight {
 android {
     namespace = "dev.dhyto.fpl"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
 }
 
 dependencies {
@@ -160,4 +150,13 @@ dependencies {
         .forEach {
             add(it.name, "io.mockative:mockative-processor:2.0.1")
         }
+}
+
+
+// Ensure KSP Android Unit Test task runs after Compose resource accessor generation to satisfy Gradle validation
+tasks.matching { it.name == "kspDebugUnitTestKotlinAndroid" }.configureEach {
+    dependsOn(
+        ":shared:generateResourceAccessorsForAndroidUnitTest",
+        ":shared:generateResourceAccessorsForAndroidUnitTestDebug"
+    )
 }
